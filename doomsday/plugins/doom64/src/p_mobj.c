@@ -516,20 +516,6 @@ void P_MobjThinker(void *mobjThinkerPtr)
     // relative health level.
     P_UpdateHealthBits(mobj);
 
-#if __JHERETIC__
-    // Lightsources must stay where they're hooked.
-    if(mobj->type == MT_LIGHTSOURCE)
-    {
-        if(mobj->moveDir > 0)
-            mobj->origin[VZ] = P_GetDoublep(Mobj_Sector(mobj), DMU_FLOOR_HEIGHT);
-        else
-            mobj->origin[VZ] = P_GetDoublep(Mobj_Sector(mobj), DMU_CEILING_HEIGHT);
-
-        mobj->origin[VZ] += FIX2FLT(mobj->moveDir);
-        return;
-    }
-#endif
-
     // Handle X and Y momentums.
     if(!FEQUAL(mobj->mom[MX], 0) || !FEQUAL(mobj->mom[MY], 0) || (mobj->flags & MF_SKULLFLY))
     {
