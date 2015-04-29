@@ -171,7 +171,9 @@ void UILog_Post(uiwidget_t *ob, byte flags, char const *text)
 
     UILog_Push(ob, flags, p, cfg.common.msgUptime * TICSPERSEC);
 
-    M_Free(bigBuf);
+    if(bigBuf) {
+        M_Free(bigBuf);
+    }
 
 #undef SMALLBUF_MAXLEN
 }
