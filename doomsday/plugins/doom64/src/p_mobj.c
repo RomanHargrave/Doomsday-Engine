@@ -829,7 +829,7 @@ void P_SpawnBlood(coord_t x, coord_t y, coord_t z, int damage, angle_t angle)
 /**
  * Moves the missile forward a bit and possibly explodes it right there.
  *
- * @param th            The missile to be checked.
+ * @param mo            The missile to be checked.
  *
  * @return              @c true, if the missile is at a valid location else
  *                      @c false
