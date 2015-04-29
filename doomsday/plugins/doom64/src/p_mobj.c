@@ -954,6 +954,14 @@ mobj_t* P_SpawnMissile(mobjtype_t type, mobj_t *source, mobj_t *dest)
 }
 
 /**
+ * XXX  It looks like this TODO has been here since this code made it in here, 
+ *      which makes me wonder if this was in the original jDoom from which jDoom64 was
+ *      created. If that is the case, then this method has been removed from the jDoom plugin
+ *      which raises the question of this function's necessity.
+ *      - Roman Hargrave
+ *
+ * This looks to spawn a missile-like thing at a certain angle.
+ *  
  * d64tc
  * dj - It would appear this routine has been stolen from HEXEN and then
  *      butchered...
