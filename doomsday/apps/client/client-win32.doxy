@@ -1,0 +1,15 @@
+# API documentation for the Doomsday Client
+@INCLUDE = ../../doomsday.doxy
+
+PROJECT_NAME        = "Doomsday Client"
+PROJECT_NUMBER      = 2.0
+PROJECT_BRIEF       = "Internal documentation (Windows)"
+OUTPUT_DIRECTORY    = ../../apidoc/win32/
+
+INPUT               = ../api include src
+EXCLUDE             = include/unix include/macx src/unix src/macx
+
+PREDEFINED          = __DOOMSDAY__ __CLIENT__ WIN32 __cplusplus \
+                      "DENG2_PIMPL(C)=typedef C Public; struct C::Instance : public de::Private<C>" \
+                      "DENG2_PIMPL_NOREF(C)=struct C::Instance : public de::IPrivate" \
+                      "DENG2_PRIVATE(Var)=struct Instance; Instance *Var;"

@@ -85,12 +85,8 @@ def todays_platform_release():
                                      '/main/binary-%s' % arch, n))
                                  
     # Also the build logs.
-    if sys.platform[:3] != 'win':
-        system_command('./logcleanup.py buildlog.txt builderrors.txt > buildsummary.txt')
-        remote_copy('buildsummary.txt', ev.file_path('doomsday-out-%s.txt' % sys_id()))
-    else:        
-        remote_copy('buildlog.txt', ev.file_path('doomsday-out-%s.txt' % sys_id()))
-        remote_copy('builderrors.txt', ev.file_path('doomsday-err-%s.txt' % sys_id()))
+    remote_copy('buildlog.txt', ev.file_path('doomsday-out-%s.txt' % sys_id()))
+    remote_copy('builderrors.txt', ev.file_path('doomsday-err-%s.txt' % sys_id()))
 
     if 'linux' in sys_id():
         remote_copy('dsfmod/fmod-out-%s.txt' % sys_id(), ev.file_path('fmod-out-%s.txt' % sys_id()))
@@ -159,7 +155,7 @@ def update_changes(debChanges=False):
         # Also update the doomsday-fmod changelog (just version number).
         os.chdir(os.path.join(builder.config.DISTRIB_DIR, 'dsfmod'))
         
-        fmodVer = build_version.parse_header_for_version('../../doomsday/plugins/fmod/include/version.h')
+        fmodVer = build_version.parse_cmake_for_version('../../doomsday/cmake/Version.cmake')
         debVer = "%s.%s.%s-%s" % (fmodVer[0], fmodVer[1], fmodVer[2], todays_build_tag())
         print "Marking new FMOD version:", debVer
         msg = 'New release: Doomsday Engine build %i.' % builder.Event().number()
@@ -393,52 +389,45 @@ def generate_apidoc():
     system_command('wc -l doxyissues-qch.txt')
 
     print >> sys.stderr, "\nPublic API 2.0 docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/libcore'))    
-    system_command('doxygen api2.doxy >/dev/null 2>../doxyissues-api2.txt')
-    system_command('wc -l ../doxyissues-api2.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/sdk/libcore'))    
+    system_command('doxygen api2.doxy >/dev/null 2>../../doxyissues-api2.txt')
+    system_command('wc -l ../../doxyissues-api2.txt')
     
     print >> sys.stderr, "\nPublic API docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/client'))    
-    system_command('doxygen api.doxy >/dev/null 2>../doxyissues-api.txt')
-    system_command('wc -l ../doxyissues-api.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/apps/client'))    
+    system_command('doxygen api.doxy >/dev/null 2>../../doxyissues-api.txt')
+    system_command('wc -l ../../doxyissues-api.txt')
 
     print >> sys.stderr, "\nlibshell docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/libshell'))
-    system_command('doxygen shell.doxy >/dev/null 2>../doxyissues-shell.txt')
-    system_command('wc -l ../doxyissues-shell.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/sdk/libshell'))
+    system_command('doxygen shell.doxy >/dev/null 2>../../doxyissues-shell.txt')
+    system_command('wc -l ../../doxyissues-shell.txt')
 
     print >> sys.stderr, "\nInternal Win32 docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/client'))
-    system_command('doxygen client-win32.doxy >/dev/null 2>../doxyissues-win32.txt')
-    system_command('wc -l ../doxyissues-win32.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/apps/client'))
+    system_command('doxygen client-win32.doxy >/dev/null 2>../../doxyissues-win32.txt')
+    system_command('wc -l ../../doxyissues-win32.txt')
 
     print >> sys.stderr, "\nInternal Mac/Unix docs..."
-    system_command('doxygen client-mac.doxy >/dev/null 2>../doxyissues-mac.txt')        
-    system_command('wc -l ../doxyissues-mac.txt')
+    system_command('doxygen client-mac.doxy >/dev/null 2>../../doxyissues-mac.txt')        
+    system_command('wc -l ../../doxyissues-mac.txt')
 
     print >> sys.stderr, "\nDoom plugin docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/plugins/doom'))
-    system_command('doxygen doom.doxy >/dev/null 2>../../doxyissues-doom.txt')
-    system_command('wc -l ../../doxyissues-doom.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/apps/plugins/doom'))
+    system_command('doxygen doom.doxy >/dev/null 2>../../../doxyissues-doom.txt')
+    system_command('wc -l ../../../doxyissues-doom.txt')
 
     print >> sys.stderr, "\nHeretic plugin docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/plugins/heretic'))
-    system_command('doxygen heretic.doxy >/dev/null 2>../../doxyissues-heretic.txt')
-    system_command('wc -l ../../doxyissues-heretic.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/apps/plugins/heretic'))
+    system_command('doxygen heretic.doxy >/dev/null 2>../../../doxyissues-heretic.txt')
+    system_command('wc -l ../../../doxyissues-heretic.txt')
 
     print >> sys.stderr, "\nHexen plugin docs..."
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/plugins/hexen'))
-    system_command('doxygen hexen.doxy >/dev/null 2>../../doxyissues-hexen.txt')
-    system_command('wc -l ../../doxyissues-hexen.txt')
+    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/apps/plugins/hexen'))
+    system_command('doxygen hexen.doxy >/dev/null 2>../../../doxyissues-hexen.txt')
+    system_command('wc -l ../../../doxyissues-hexen.txt')
 
 
-def generate_readme():
-    """Run Amethyst to generate readme documentation."""
-    git_pull()
-    os.chdir(os.path.join(builder.config.DISTRIB_DIR, '../doomsday/doc/output'))
-    system_command('make clean all')
-    
-    
 def generate_wiki():
     """Automatically generate wiki pages."""
     git_pull()
@@ -545,7 +534,6 @@ commands = {
     'purge': purge_obsolete,
     'cleanup': dir_cleanup,
     'apidoc': generate_apidoc,
-    'readme': generate_readme,
     'wiki': generate_wiki,
     'web_init': web_init,
     'web_update': web_update,

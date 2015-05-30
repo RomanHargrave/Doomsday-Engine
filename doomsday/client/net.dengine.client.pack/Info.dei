@@ -1,8 +1,0 @@
-# Client's primary resources
-
-title: Doomsday Client
-version: 1.15.0
-license: GPL 3+
-tags: core client
-
-importPath <modules>
