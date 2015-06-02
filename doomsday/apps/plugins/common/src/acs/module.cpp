@@ -69,6 +69,7 @@ bool Module::recognize(File1 const &file)  // static
 
 Module *Module::newFromBytecode(Block const &bytecode)  // static
 {
+    static int const OPEN_SCRIPTS_BASE = 1000;
     DENG2_ASSERT(!IS_CLIENT);
     LOG_AS("acs::Module");
 
@@ -89,7 +90,6 @@ Module *Module::newFromBytecode(Block const &bytecode)  // static
     module->d->entryPoints.reserve(numEntryPoints);
     for(dint32 i = 0; i < numEntryPoints; ++i)
     {
-#define OPEN_SCRIPTS_BASE 1000
 
         EntryPoint ep;
 
@@ -116,7 +116,6 @@ Module *Module::newFromBytecode(Block const &bytecode)  // static
 
         module->d->entryPoints << ep;  // makes a copy.
 
-#undef OPEN_SCRIPTS_BASE
     }
     // Prepare a script-number => EntryPoint LUT.
     module->d->buildEntryPointLut();

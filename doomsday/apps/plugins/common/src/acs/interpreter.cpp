@@ -926,9 +926,12 @@ namespace internal
 
     ACS_COMMAND(SetLineTexture)
     {
-#define TEXTURE_TOP 0
-#define TEXTURE_MIDDLE 1
-#define TEXTURE_BOTTOM 2
+        enum 
+        {
+            TEXTURE_TOP = 0,
+            TEXTURE_MIDDLE,
+            TEXTURE_BOTTOM
+        };
 
         AutoStr *path = Str_PercentEncode(AutoStr_FromTextStd(interp.scriptSys().module().constant(interp.locals.pop()).toUtf8().constData()));
         uri_s *uri = Uri_NewWithPath3("Textures", Str_Text(path));
@@ -966,10 +969,6 @@ namespace internal
         }
 
         return Continue;
-
-#undef TEXTURE_BOTTOM
-#undef TEXTURE_MIDDLE
-#undef TEXTURE_TOP
     }
 
     ACS_COMMAND(SetLineBlocking)
