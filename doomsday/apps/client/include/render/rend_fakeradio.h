@@ -94,16 +94,6 @@ void Rend_RadioRegister();
 void Rend_RadioInitForMap(de::Map &map);
 
 /**
- * Returns @c true iff @a line qualifies for (edge) shadow casting.
- */
-bool Rend_RadioLineCastsShadow(Line const &line);
-
-/**
- * Returns @c true iff @a plane qualifies for (wall) shadow casting.
- */
-bool Rend_RadioPlaneCastsShadow(Plane const &plane);
-
-/**
  * Returns the FakeRadio data for the specified line @a side.
  */
 LineSideRadioData &Rend_RadioDataForLineSide(LineSide &side);
@@ -112,15 +102,6 @@ LineSideRadioData &Rend_RadioDataForLineSide(LineSide &side);
  * To be called to update the shadow properties for the specified line @a side.
  */
 void Rend_RadioUpdateForLineSide(LineSide &side);
-
-/**
- * Updates all the shadow offsets for the given vertex.
- *
- * @pre Lineowner rings must be set up.
- *
- * @param vtx  Vertex to be updated.
- */
-void Rend_RadioUpdateVertexShadowOffsets(Vertex &vtx);
 
 /**
  * Returns the global shadow darkness factor, derived from values in Config.
