@@ -5,6 +5,7 @@ Session.vim
 .netrwhist~
 .directory
 .DS_Store
+.ycm_extra_conf.py
 macx_release_build
 /doomsday/build/win32/license.txt
 *.user.*
