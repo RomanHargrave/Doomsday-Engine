@@ -576,6 +576,7 @@ typedef float AudioEnvironmentFactors[NUM_REVERB_DATA];
 /// Momentum axis indices. @ingroup mobj
 enum { MX, MY, MZ };
 
+// TODO Future: This can be eliminated by moving entirely to C++
 /// Base mobj_t elements. Games MUST use this as the basis for mobj_t. @ingroup mobj
 #define DD_BASE_MOBJ_ELEMENTS() \
     DD_BASE_DDMOBJ_ELEMENTS() \
@@ -592,7 +593,7 @@ enum { MX, MY, MZ };
     int             ddFlags; /* Doomsday mobj flags (DDMF_*) */ \
     coord_t         floorClip; /* value to use for floor clipping */ \
     int             valid; /* if == valid, already checked */ \
-    int             type; /* mobj type */ \
+    int             type; /* mobj type TODO this should be mobjtype_t, but that's defined at plugin level (!) */  \
     struct state_s *state; \
     int             tics; /* state tic counter */ \
     coord_t         floorZ; /* highest contacted floor */ \

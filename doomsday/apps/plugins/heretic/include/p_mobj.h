@@ -192,9 +192,14 @@ typedef struct mobj_s {
 
     // Heretic-specific data:
     int             damage;         // For missiles
+
+    // TODO Cleanup: C/++ is not a dynamic language!!!!!!
+    //               These fields treat it like one, and store 
+    //               everything from enumerations to chicken data (!)
     int             special1;       // Special info
     int             special2;       // Special info
     int             special3;       // Special info
+
     int             moveDir;        // 0-7
     int             moveCount;      // when 0, select a new dir
     struct mobj_s*  target;         // thing being chased/attacked (or NULL)

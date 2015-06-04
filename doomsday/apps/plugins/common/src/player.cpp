@@ -42,8 +42,8 @@
 
 using namespace de;
 
-#define MESSAGETICS             (4 * TICSPERSEC)
-#define CAMERA_FRICTION_THRESHOLD (.4f)
+static int const MESSAGETICS = 4 * TICSPERSEC; 
+static float const CAMERA_FRICTION_THRESHOLD = 0.4F;
 
 struct weaponslotinfo_t
 {
@@ -266,25 +266,15 @@ int P_CountPlayersInGame(PlayerSelectionCriteria const &criteria)
 
 dd_bool P_PlayerInWalkState(player_t *pl)
 {
-    if(!pl->plr->mo) return false;
-
-    /// @todo  Implementation restricts possibilities for modifying behavior solely with state definitions.
-
-#if __JDOOM__
-    return pl->plr->mo->state - STATES - PCLASS_INFO(pl->class_)->runState < 4;
-#endif
-
-#if __JHERETIC__
-    return pl->plr->mo->state - STATES - PCLASS_INFO(pl->class_)->runState < 4;
-#endif
-
-#if __JHEXEN__
-    return ((unsigned) ((pl->plr->mo->state - STATES) - PCLASS_INFO(pl->class_)->runState) < 4);
-#endif
-
-#if __JDOOM64__
-    return pl->plr->mo->state - STATES - PCLASS_INFO(pl->class_)->runState < 4;
-#endif
+    if(!pl->plr->mo)
+    {
+        return false;
+    } 
+    else
+    {
+        /// @todo  Implementation restricts possibilities for modifying behavior solely with state definitions.
+        return pl->plr->mo->state - STATES - PCLASS_INFO(pl->class_)->runState < 4;
+    }
 }
 
 void P_ShotAmmo(player_t *player)
@@ -326,7 +316,7 @@ weapontype_t P_MaybeChangeWeapon(player_t *player, weapontype_t weapon, ammotype
 
     App_Log(DE2_DEV_MAP_XVERBOSE,
             "P_MaybeChangeWeapon: plr %i, weapon %i, ammo %i, force %i",
-            (int)(player - players), weapon, ammo, force);
+            int(player - players), weapon, ammo, force);
 
     int pclass = player->class_;
 
@@ -717,8 +707,8 @@ void P_SetMessage(player_t *plr, char const *msg)
 #if __JHEXEN__
 void P_SetYellowMessageWithFlags(player_t *pl, char const *msg, int flags)
 {
-#define YELLOW_FMT      "{r=1;g=0.7;b=0.3;}"
-#define YELLOW_FMT_LEN  18
+    static std::string const YELLOW_FMT = "{r=1;g=0.7;b=0.3;}";
+    static int const YELLOW_FMT_LEN     = YELLOW_FMT.length();
 
     if(!msg || !msg[0]) return;
 
@@ -726,7 +716,7 @@ void P_SetYellowMessageWithFlags(player_t *pl, char const *msg, int flags)
 
     AutoStr *buf = AutoStr_NewStd();
     Str_Reserve(buf, YELLOW_FMT_LEN + len+1);
-    Str_Set(buf, YELLOW_FMT);
+    Str_Set(buf, YELLOW_FMT.c_str());
     Str_Appendf(buf, "%s", msg);
 
     ST_LogPost(pl - players, flags, Str_Text(buf));
@@ -741,9 +731,6 @@ void P_SetYellowMessageWithFlags(player_t *pl, char const *msg, int flags)
     /// important game message. Instead flag a bit in the packet and then
     /// reconstruct on the other end.
     NetSv_SendMessage(pl - players, Str_Text(buf));
-
-#undef YELLOW_FMT_LEN
-#undef YELLOW_FMT
 }
 
 void P_SetYellowMessage(player_t *pl, char const *msg)
@@ -1359,9 +1346,7 @@ angle_t Player_ViewYawAngle(int playerNum)
 
 void player_s::write(writer_s *writer, playerheader_t &plrHdr) const
 {
-#if __JDOOM64__ || __JHERETIC__ || __JHEXEN__
     int const plrnum = P_GetPlayerNum(this);
-#endif
 
     player_t temp, *p = &temp;
     ddplayer_t ddtemp, *dp = &ddtemp;

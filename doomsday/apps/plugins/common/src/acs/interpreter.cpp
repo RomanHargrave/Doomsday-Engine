@@ -51,6 +51,8 @@ namespace internal
 
     static String printBuffer;
 
+// TODO Modularization: the hexen plugin should register all of its required ACS bits 
+//                      rather than expect that they be defined here
 #ifdef __JHEXEN__
     static byte specArgs[5];
 

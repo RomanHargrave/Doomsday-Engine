@@ -36,9 +36,12 @@ using namespace de;
 using namespace common;
 
 D_CMD(SetColor);
+
+// TODO Move this to the hexen plugin
 #if __JHEXEN__
 D_CMD(SetClass);
 #endif
+
 D_CMD(LocalMessage);
 
 static void D_NetMessageEx(int player, char const *msg, dd_bool playSound);

@@ -31,6 +31,7 @@
 
 using namespace de;
 
+// XXX This preprocessor specialization (appears as if it) can be harmlessly removed
 #if !__JHEXEN__
 
 /**
@@ -72,6 +73,9 @@ struct TextureAnimDef
 // This array is treated as a hardcoded replacement for data that can be loaded from a
 // lump, so we need to use little-endian byte ordering.
 static TextureAnimDef animsShared[] = {
+
+// TODO Modularization: Each plugin should tell teh animdef processor
+//                      about the animations that may be (re)defined
 #if __JDOOM64__
     { TexturesScheme,   "CFACEC",   "CFACEA",   MACRO_LONG(4) },
     { TexturesScheme,   "SMONAD",   "SMONAA",   MACRO_LONG(8) },

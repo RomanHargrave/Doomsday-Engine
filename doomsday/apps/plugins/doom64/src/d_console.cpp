@@ -60,7 +60,7 @@ D_CMD(ScreenShot)
 
 void G_ConsoleRegistration()
 {
-    Common_Register();
+    common::Register();
 
     // View/Refresh
     // TODO Audio feedback for view resize (for jDoom feature parity)

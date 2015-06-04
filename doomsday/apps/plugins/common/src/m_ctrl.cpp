@@ -73,12 +73,13 @@ static controlconfig_t controlConfig[] =
     { "Rocket Launcher", 0, 0, "impulse weapon5", 0 },
     { "Plasma Rifle", 0, 0, "impulse weapon6", 0 },
     { "BFG 9000", 0, 0, "impulse weapon7", 0 },
-#endif
-#if __JDOOM64__
+#   if __JDOOM64__
     { "Unmaker", 0, 0, "impulse weapon10", 0 },
+#   endif 
 #endif
 
-#if __JHERETIC__
+#if __JHERETIC__ || __JHEXEN__
+#   if defined(__JHERETIC__)
     { "Gauntlets/Staff", 0, 0, "impulse weapon1", 0 },
     { "Elvenwand", 0, 0, "impulse weapon2", 0 },
     { "Crossbow", 0, 0, "impulse weapon3", 0 },
@@ -86,24 +87,20 @@ static controlconfig_t controlConfig[] =
     { "Hellstaff", 0, 0, "impulse weapon5", 0 },
     { "Phoenix Rod", 0, 0, "impulse weapon6", 0 },
     { "Firemace", 0, 0, "impulse weapon7", 0 },
-#endif
-
-#if __JHEXEN__
+#   elif defined(__JHEXEN__)
     { "Weapon 1", 0, 0, "impulse weapon1", 0 },
     { "Weapon 2", 0, 0, "impulse weapon2", 0 },
     { "Weapon 3", 0, 0, "impulse weapon3", 0 },
     { "Weapon 4", 0, 0, "impulse weapon4", 0 },
-#endif
+#   endif
 
-#if __JHERETIC__ || __JHEXEN__
     { "Inventory", 0, 0, 0, 0 },
     { "Move Left", 0, 0, "impulse previtem", CCF_REPEAT },
     { "Move Right", 0, 0, "impulse nextitem", CCF_REPEAT },
     { "Use Item", 0, 0, "impulse useitem", 0 },
     { "Panic!", 0, 0, "impulse panic", 0 },
-#endif
 
-#ifdef __JHERETIC__
+#   if defined(__JHERETIC__)
     { (char const *) TXT_TXT_INV_INVULNERABILITY, 0, 0, "impulse invulnerability", 0 },
     { (char const *) TXT_TXT_INV_INVISIBILITY, 0, 0, "impulse invisibility", 0 },
     { (char const *) TXT_TXT_INV_HEALTH, 0, 0, "impulse health", 0 },
@@ -114,9 +111,8 @@ static controlconfig_t controlConfig[] =
     { (char const *) TXT_TXT_INV_EGG, 0, 0, "impulse egg", 0 },
     { (char const *) TXT_TXT_INV_FLY, 0, 0, "impulse fly", 0 },
     { (char const *) TXT_TXT_INV_TELEPORT, 0, 0, "impulse teleport", 0 },
-#endif
 
-#ifdef __JHEXEN__
+#   elif defined(__JHEXEN__)
     { (char const *) TXT_TXT_INV_TORCH, 0, 0, "impulse torch", 0 },
     { (char const *) TXT_TXT_INV_HEALTH, 0, 0, "impulse health", 0 },
     { (char const *) TXT_TXT_INV_SUPERHEALTH, 0, 0, "impulse mysticurn", 0 },
@@ -129,7 +125,8 @@ static controlconfig_t controlConfig[] =
     { (char const *) TXT_TXT_INV_INVULNERABILITY, 0, 0, "impulse invulnerability", 0 },
     { (char const *) TXT_TXT_INV_SUMMON, 0, 0, "impulse darkservant", 0 },
     { (char const *) TXT_TXT_INV_EGG, 0, 0, "impulse egg", 0 },
-#endif
+#   endif
+#endif 
 
     { "Chat", 0, 0, 0, 0 },
     { "Open Chat", 0, 0, "beginchat", CCF_MULTIPLAYER },

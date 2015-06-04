@@ -31,20 +31,36 @@
 #include "hu_menu.h"
 #include "hu_msg.h"
 #include "g_common.h"
+
+// TODO Inventory should be exposed to all plugins, or refactored out to a new shared codebase, rather
+//      than conditionally added to the common code base
 #if __JHERETIC__ || __JHEXEN__
 #  include "p_inventory.h"
 #endif
 
+// TODO These can ultimately be replaced by migrating all of doomsday to C++ 
+//      and exposing this logic as member functions of the player class
+//      Additionally, it makes little sense that this is necessary logic for all
+//      plugins but Hexen..
 #if __JDOOM__ || __JHERETIC__ || __JDOOM64__
 #  define GOTWPN(x)         (plr->weaponOwned[x])
 #  define ISWPN(x)          (plr->readyWeapon == x)
 #endif
 
-#define SLOWTURNTICS        (6)
+// XXX Migrated from `JOY` macro.
+//     return type of `float` assumed, due to divison being performed.
+static inline float JOY(float x)
+{
+    return x / 100.0F;
+}
 
-#define JOY(x)              ((x) / 100)
+// TODO The following macros should be converted to constants, 
+//      however, they are defined in headers in individual plugins
+//      (such as doom's p_local.h).
 #define TOCENTER            (-8)
 #define DELTAMUL            (6.324555320) // Used when calculating ticcmd_t.lookdirdelta
+
+static int const SLOWTURNTICS = 6;
 
 typedef struct pcontrolstate_s {
     // Looking around.
@@ -87,6 +103,9 @@ void G_ControlRegister(void)
     C_VAR_FLOAT ("ctl-turn-speed",  &cfg.common.turnSpeed, 0, 1, 5);
     C_VAR_INT   ("ctl-run",         &cfg.common.alwaysRun, 0, 0, 1);
 
+// TODO Modularization: Each plugin should be able to register its own controls,
+//                      this can be easily factored in to the idTech1 engine support
+//                      known as `common`.
 #if __JHERETIC__ || __JHEXEN__
     C_VAR_BYTE  ("ctl-inventory-mode", &cfg.inventorySelectMode, 0, 0, 1);
     C_VAR_BYTE  ("ctl-inventory-wrap", &cfg.inventoryWrap, 0, 0, 1);
@@ -133,6 +152,10 @@ void G_DefineControls(void)
     P_NewPlayerControl(CTL_WEAPON8, CTLT_IMPULSE, "weapon8", "game");
     P_NewPlayerControl(CTL_WEAPON9, CTLT_IMPULSE, "weapon9", "game");
     P_NewPlayerControl(CTL_WEAPON0, CTLT_IMPULSE, "weapon0", "game");
+// TODO Modularization: Each plugin should register its own controls
+// TODO Future: The weapon inventory should be made abstract and dynamically growing 
+//              rather than having a known number of weapons that must have hardcoded
+//              support
 #if __JDOOM64__
     P_NewPlayerControl(CTL_WEAPON10, CTLT_IMPULSE, "weapon10", "game");
 #endif
@@ -189,6 +212,7 @@ void G_DefineControls(void)
     P_NewPlayerControl(CTL_SCORE_SHOW, CTLT_IMPULSE, "showscore", "game");
 }
 
+// TODO Modularization: Each game should register its own custom defaults
 D_CMD(DefaultGameBinds)
 {
     /// @todo: When the actual bindings setup UI is done, these default bindings
@@ -423,76 +447,6 @@ float G_GetLookOffset(int pnum)
     return controlStates[pnum].lookOffset;
 }
 
-/*
- * Offset is in 'angles', where 110 corresponds 85 degrees.
- * The delta has higher precision with small offsets.
- */
-#if 0
-char G_MakeLookDelta(float offset)
-{
-    dd_bool minus = offset < 0;
-
-    offset = sqrt(fabs(offset)) * DELTAMUL;
-    if(minus)
-        offset = -offset;
-    // It's only a char...
-    if(offset > 127)
-        offset = 127;
-    if(offset < -128)
-        offset = -128;
-    return (signed char) offset;
-}
-
-/**
- * Turn client angle.
- */
-static void G_AdjustAngle(player_t *player, int turn, float elapsed)
-{
-    if(!player->plr->mo || player->playerState == PST_DEAD ||
-       player->viewLock)
-        return; // Sorry, can't help you, pal.
-
-    /* $unifiedangles */
-    player->plr->mo->angle += FLT2FIX(cfg.common.turnSpeed * elapsed * 35.f * turn);
-}
-
-static void G_AdjustLookDir(player_t *player, int look, float elapsed)
-{
-    ddplayer_t *ddplr = player->plr;
-
-    if(look)
-    {
-        if(look == TOCENTER)
-        {
-            player->centering = true;
-        }
-        else
-        {
-            ddplr->lookDir += cfg.common.lookSpeed * look * elapsed * 35; /* $unifiedangles */
-        }
-    }
-
-    if(player->centering)
-    {
-        float step = 8 * elapsed * 35;
-
-        /* $unifiedangles */
-        if(ddplr->lookDir > step)
-        {
-            ddplr->lookDir -= step;
-        }
-        else if(ddplr->lookDir < -step)
-        {
-            ddplr->lookDir += step;
-        }
-        else
-        {
-            ddplr->lookDir = 0;
-            player->centering = false;
-        }
-    }
-}
-#endif
 
 /**
  * Updates the viewers' look offset.
@@ -509,588 +463,7 @@ void P_PlayerThinkHeadTurning(int pnum, timespan_t ticLength)
 
     state->lookOffset = pos * .5f;
 
-#if 0 // Old logic.
-    if(povangle != -1)
-    {
-        cstate->targetLookOffset = povangle / 8.0f;
-        if(cstate->targetLookOffset == .5f)
-        {
-            if(cstate->lookOffset < 0)
-                cstate->targetLookOffset = -.5f;
-        }
-        else if(cstate->targetLookOffset > .5)
-            cstate->targetLookOffset -= 1;
-    }
-    else
-        cstate->targetLookOffset = 0;
-
-    if(cstate->targetLookOffset != cstate->lookOffset && cfg.common.povLookAround)
-    {
-        float   diff = (cstate->targetLookOffset - cstate->lookOffset) / 2;
-
-        // Clamp it.
-        if(diff > .075f)
-            diff = .075f;
-        if(diff < -.075f)
-            diff = -.075f;
-
-        cstate->lookOffset += diff;
-    }
-#endif
 }
-
-#if 0
-/**
- * Builds a ticcmd from all of the available inputs.
- */
-void G_BuildTiccmd(ticcmd_t *cmd, float elapsedTime)
-{
-    player_t *cplr = &players[CONSOLEPLAYER];
-
-    memset(cmd, 0, sizeof(*cmd));
-
-    // During demo playback, all cmds will be blank.
-    if(Get(DD_PLAYBACK))
-        return;
-
-    G_UpdateCmdControls(cmd, CONSOLEPLAYER, elapsedTime);
-
-    G_SetCmdViewAngles(cmd, cplr);
-
-    // special buttons
-    if(sendpause)
-    {
-        sendpause = false;
-        // Clients can't pause anything.
-        if(!IS_CLIENT)
-            cmd->pause = true;
-    }
-
-    if(IS_CLIENT)
-    {
-        // Clients mirror their local commands.#endif
-        memcpy(&players[CONSOLEPLAYER].cmd, cmd, sizeof(*cmd));
-    }
-}
-
-/*
- * Combine the source ticcmd with the destination ticcmd.  This is
- * done when there are multiple ticcmds to execute on a single game
- * tick.
- */
-void G_MergeTiccmd(ticcmd_t *dest, ticcmd_t *src)
-{
-    dest->forwardMove = src->forwardMove;
-    dest->sideMove = src->sideMove;
-
-    dest->angle = src->angle;
-    dest->pitch = src->pitch;
-
-    dest->fly = src->fly;
-
-    if(src->arti)
-        dest->arti = src->arti;
-
-    if(src->changeWeapon)
-        dest->changeWeapon = src->changeWeapon;
-
-    dest->attack |= src->attack;
-    dest->use |= src->use;
-    dest->jump |= src->jump;
-    dest->pause |= src->pause;
-}
-
-/**
- * Response to in-game control actions (movement, inventory etc).
- * Updates the ticcmd with the current control states.
- */
-static void G_UpdateCmdControls(ticcmd_t *cmd, int pnum,
-                                float elapsedTime)
-{
-    float elapsedTics = elapsedTime * 35;
-
-    dd_bool pausestate = Pause_IsPaused();
-    int     i;
-    dd_bool strafe = 0;
-    dd_bool bstrafe = 0;
-    int     speed = 0;
-    int     turnSpeed = 0, fwdMoveSpeed = 0, sideMoveSpeed = 0;
-    int     forward = 0;
-    int     side = 0;
-    int     turn = 0;
-    int     joyturn = 0, joystrafe = 0, joyfwd = 0, joylook = 0;
-    int    *axes[5] = { 0, &joyfwd, &joyturn, &joystrafe, &joylook };
-    int     look = 0, lspeed = 0;
-    int     flyheight = 0;
-    pcontrolstate_t *cstate = &controlStates[pnum];
-    player_t *plr = &players[pnum];
-    classinfo_t *pClassInfo = PCLASS_INFO(plr->class_);
-
-    // Check the joystick axes.
-    for(i = 0; i < 8; i++)
-        if(axes[cfg.joyaxis[i]])
-            *axes[cfg.joyaxis[i]] += joymove[i];
-
-    strafe = PLAYER_ACTION(pnum, A_STRAFE);
-    speed = PLAYER_ACTION(pnum, A_SPEED);
-
-    // Walk -> run, run -> walk.
-    if(cfg.common.alwaysRun)
-        speed = !speed;
-
-    // Use two stage accelerative turning on the keyboard and joystick.
-    if(joyturn < -0 || joyturn > 0 ||
-       PLAYER_ACTION(pnum, A_TURNRIGHT) ||
-       PLAYER_ACTION(pnum, A_TURNLEFT))
-        cstate->turnheld += elapsedTics;
-    else
-        cstate->turnheld = 0;
-
-    // Determine the appropriate look speed based on how long the key
-    // has been held down.
-    if(PLAYER_ACTION(pnum, A_LOOKDOWN) || PLAYER_ACTION(pnum, A_LOOKUP))
-        cstate->lookheld += elapsedTics;
-    else
-        cstate->lookheld = 0;
-
-    if(cstate->lookheld < SLOWTURNTICS)
-        lspeed = 1;
-    else
-        lspeed = 2;
-
-    // Return the max speed for the player's class.
-    //// @todo the Turbo movement multiplier should happen server-side!
-    sideMoveSpeed = pClassInfo->sidemove[speed] * turboMul;
-    fwdMoveSpeed = pClassInfo->forwardmove[speed] * turboMul;
-    turnSpeed = pClassInfo->turnSpeed[(cstate->turnheld < SLOWTURNTICS ? 2 : speed)];
-
-    // let movement keys cancel each other out
-    if(strafe)
-    {
-        if(PLAYER_ACTION(pnum, A_TURNRIGHT))
-            side += sideMoveSpeed;
-        if(PLAYER_ACTION(pnum, A_TURNLEFT))
-            side -= sideMoveSpeed;
-
-        // Swap strafing and turning.
-        i = joystrafe;
-        joystrafe = joyturn;
-        joyturn = i;
-    }
-    else
-    {
-        if(PLAYER_ACTION(pnum, A_TURNRIGHT))
-            turn -= turnSpeed;
-        if(PLAYER_ACTION(pnum, A_TURNLEFT))
-            turn += turnSpeed;
-    }
-
-    // Joystick turn.
-    if(joyturn > 0)
-        turn -= turnSpeed * JOY(joyturn);
-    if(joyturn < -0)
-        turn += turnSpeed * JOY(-joyturn);
-
-    // Joystick strafe.
-    if(joystrafe < -0)
-        side -= sideMoveSpeed * JOY(-joystrafe);
-    if(joystrafe > 0)
-        side += sideMoveSpeed * JOY(joystrafe);
-
-    if(joyfwd < -0)
-        forward += fwdMoveSpeed * JOY(-joyfwd);
-    if(joyfwd > 0)
-        forward -= fwdMoveSpeed * JOY(joyfwd);
-
-
-    if(PLAYER_ACTION(pnum, A_FORWARD))
-        forward += fwdMoveSpeed;
-
-    if(PLAYER_ACTION(pnum, A_BACKWARD))
-        forward -= fwdMoveSpeed;
-
-    if(PLAYER_ACTION(pnum, A_STRAFERIGHT))
-        side += sideMoveSpeed;
-    if(PLAYER_ACTION(pnum, A_STRAFELEFT))
-        side -= sideMoveSpeed;
-
-    // Look up/down/center keys
-    if(!cfg.common.lookSpring || (cfg.common.lookSpring && !forward))
-    {
-        if(PLAYER_ACTION(pnum, A_LOOKUP))
-        {
-            look = lspeed;
-        }
-        if(PLAYER_ACTION(pnum, A_LOOKDOWN))
-        {
-            look = -lspeed;
-        }
-        if(PLAYER_ACTION(pnum, A_LOOKCENTER))
-        {
-            look = TOCENTER;
-        }
-    }
-
-    // Fly up/down/drop keys
-    if(PLAYER_ACTION(pnum, A_FLYUP))
-        // note that the actual flyheight will be twice this
-        flyheight = 5;
-
-    if(PLAYER_ACTION(pnum, A_FLYDOWN))
-        flyheight = -5;
-
-    if(PLAYER_ACTION(pnum, A_FLYCENTER))
-    {
-        flyheight = TOCENTER;
-
-#if __JHERETIC__
-        if(!cfg.useMLook) // only in jHeretic
-            look = TOCENTER;
-#else
-        look = TOCENTER;
-#endif
-    }
-
-#if __JHERETIC__ || __JHEXEN__ || __JSTRIFE__
-    // Use artifact key
-    if(PLAYER_ACTION(pnum, A_USEARTIFACT))
-    {
-        if(Hu_InventoryIsOpen())
-        {
-            plr->readyItem = plr->inventory[plr->invPtr].type;
-
-            Hu_InventoryOpen(plr - players, false); // close the inventory
-
-            if(cfg.chooseAndUse)
-                cmd->arti = plr->inventory[plr->invPtr].type;
-            else
-                cmd->arti = 0;
-
-            usearti = false;
-        }
-        else if(usearti)
-        {
-            cmd->arti = plr->inventory[plr->invPtr].type;
-            usearti = false;
-        }
-    }
-#endif
-
-    //
-    // Artifact hot keys
-    //
-#if __JHERETIC__
-    // Check Tome of Power and other artifact hotkeys.
-    if(PLAYER_ACTION(pnum, A_TOMEOFPOWER) && !cmd->arti &&
-       !plr->powers[PT_WEAPONLEVEL2])
-    {
-        PLAYER_ACTION(pnum, A_TOMEOFPOWER) = false;
-        cmd->arti = IIT_TOMBOFPOWER;
-    }
-    for(i = 0; ArtifactHotkeys[i].artifact != IIT_NONE && !cmd->arti; i++)
-    {
-        if(PLAYER_ACTION(pnum, ArtifactHotkeys[i].action))
-        {
-            PLAYER_ACTION(pnum, ArtifactHotkeys[i].action) = false;
-            cmd->arti = ArtifactHotkeys[i].artifact;
-            break;
-        }
-    }
-#endif
-
-#if __JHEXEN__
-    if(PLAYER_ACTION(pnum, A_PANIC) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_PANIC) = false;    // Use one of each artifact
-        cmd->arti = NUM_INVENTORYITEM_TYPES;
-    }
-    else if(plr->plr->mo && PLAYER_ACTION(pnum, A_HEALTH) &&
-            !cmd->arti && (plr->plr->mo->health < maxHealth))
-    {
-        PLAYER_ACTION(pnum, A_HEALTH) = false;
-        cmd->arti = IIT_HEALTH;
-    }
-    else if(PLAYER_ACTION(pnum, A_POISONBAG) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_POISONBAG) = false;
-        cmd->arti = IIT_POISONBAG;
-    }
-    else if(PLAYER_ACTION(pnum, A_BLASTRADIUS) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_BLASTRADIUS) = false;
-        cmd->arti = IIT_BLASTRADIUS;
-    }
-    else if(PLAYER_ACTION(pnum, A_TELEPORT) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_TELEPORT) = false;
-        cmd->arti = IIT_TELEPORT;
-    }
-    else if(PLAYER_ACTION(pnum, A_TELEPORTOTHER) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_TELEPORTOTHER) = false;
-        cmd->arti = IIT_TELEPORTOTHER;
-    }
-    else if(PLAYER_ACTION(pnum, A_EGG) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_EGG) = false;
-        cmd->arti = IIT_EGG;
-    }
-    else if(PLAYER_ACTION(pnum, A_INVULNERABILITY) && !cmd->arti &&
-            !plr->powers[PT_INVULNERABILITY])
-    {
-        PLAYER_ACTION(pnum, A_INVULNERABILITY) = false;
-        cmd->arti = IIT_INVULNERABILITY;
-    }
-    else if(PLAYER_ACTION(pnum, A_MYSTICURN) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_MYSTICURN) = false;
-        cmd->arti = IIT_SUPERHEALTH;
-    }
-    else if(PLAYER_ACTION(pnum, A_TORCH) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_TORCH) = false;
-        cmd->arti = IIT_TORCH;
-    }
-    else if(PLAYER_ACTION(pnum, A_KRATER) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_KRATER) = false;
-        cmd->arti = IIT_BOOSTMANA;
-    }
-    else if(PLAYER_ACTION(pnum, A_SPEEDBOOTS) & !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_SPEEDBOOTS) = false;
-        cmd->arti = IIT_SPEED;
-    }
-    else if(PLAYER_ACTION(pnum, A_DARKSERVANT) && !cmd->arti)
-    {
-        PLAYER_ACTION(pnum, A_DARKSERVANT) = false;
-        cmd->arti = IIT_SUMMON;
-    }
-#endif
-
-    // Buttons
-
-    if(PLAYER_ACTION(pnum, A_FIRE))
-        cmd->attack = true;
-
-    if(PLAYER_ACTION(pnum, A_USE))
-    {
-        cmd->use = true;
-        // clear double clicks if hit use button
-        cstate->dclicks = 0;
-    }
-
-    if(PLAYER_ACTION(pnum, A_JUMP))
-        cmd->jump = true;
-
-#if __JDOOM__ || __JDOOM64__
-    // Determine whether a weapon change should be done.
-    if(PLAYER_ACTION(pnum, A_WEAPONCYCLE1))  // Fist/chainsaw.
-    {
-        if(ISWPN(WT_FIRST) && GOTWPN(WT_EIGHTH))
-            i = WT_EIGHTH;
-        else if(ISWPN(WT_EIGHTH))
-            i = WT_FIRST;
-        else if(GOTWPN(WT_EIGHTH))
-            i = WT_EIGHTH;
-        else
-            i = WT_FIRST;
-
-        cmd->changeWeapon = i + 1;
-    }
-    else if(PLAYER_ACTION(pnum, A_WEAPONCYCLE2)) // Shotgun/super sg.
-    {
-        if(ISWPN(WT_THIRD) && GOTWPN(WT_NINETH) &&
-           gameMode == commercial)
-            i = WT_NINETH;
-        else if(ISWPN(WT_NINETH))
-            i = WT_THIRD;
-        else if(GOTWPN(WT_NINETH) && gameMode == commercial)
-            i = WT_NINETH;
-        else
-            i = WT_THIRD;
-
-        cmd->changeWeapon = i + 1;
-    }
-    else
-#elif __JHERETIC__
-    // Determine whether a weapon change should be done.
-    if(PLAYER_ACTION(pnum, A_WEAPONCYCLE1))  // Staff/Gauntlets.
-    {
-        if(ISWPN(WT_FIRST) && GOTWPN(WT_EIGHTH))
-            i = WT_EIGHTH;
-        else if(ISWPN(WT_EIGHTH))
-            i = WT_FIRST;
-        else if(GOTWPN(WT_EIGHTH))
-            i = WT_EIGHTH;
-        else
-            i = WT_FIRST;
-
-        cmd->changeWeapon = i + 1;
-    }
-    else
-#endif
-    {
-        // Take the first weapon action.
-        for(i = 0; i < NUM_WEAPON_TYPES; i++)
-            if(PLAYER_ACTION(pnum, A_WEAPON1 + i))
-            {
-                cmd->changeWeapon = i + 1;
-                break;
-            }
-    }
-
-    if(PLAYER_ACTION(pnum, A_NEXTWEAPON) ||
-       PLAYER_ACTION(pnum, A_PREVIOUSWEAPON))
-    {
-        cmd->changeWeapon =
-            (PLAYER_ACTION(pnum, A_NEXTWEAPON) ? TICCMD_NEXT_WEAPON :
-             TICCMD_PREV_WEAPON);
-    }
-
-    // forward double click
-    if(PLAYER_ACTION(pnum, A_FORWARD) != cstate->dclickstate &&
-        cstate->dclicktime > 1 && cfg.dclickUse)
-    {
-        cstate->dclickstate = PLAYER_ACTION(pnum, A_FORWARD);
-
-        if(cstate->dclickstate)
-            cstate->dclicks++;
-        if(cstate->dclicks == 2)
-        {
-            cmd->use = true;
-            cstate->dclicks = 0;
-        }
-        else
-            cstate->dclicktime = 0;
-    }
-    else
-    {
-        cstate->dclicktime++;
-        if(cstate->dclicktime > 20)
-        {
-            cstate->dclicks = 0;
-            cstate->dclickstate = 0;
-        }
-    }
-
-    // strafe double click
-    bstrafe = strafe;
-    if(bstrafe != cstate->dclickstate2 &&
-       cstate->dclicktime2 > 1 && cfg.dclickUse)
-    {
-        cstate->dclickstate2 = bstrafe;
-        if(cstate->dclickstate2)
-            cstate->dclicks2++;
-        if(cstate->dclicks2 == 2)
-        {
-            cmd->use = true;
-            cstate->dclicks2 = 0;
-        }
-        else
-            cstate->dclicktime2 = 0;
-    }
-    else
-    {
-        cstate->dclicktime2++;
-        if(cstate->dclicktime2 > 20)
-        {
-            cstate->dclicks2 = 0;
-            cstate->dclickstate2 = 0;
-        }
-    }
-
-    // Mouse strafe and turn (X axis).
-    if(strafe)
-        side += mousex * 2;
-    else if(mousex)
-    {
-        // Mouse angle changes are immediate.
-        if(!pausestate && plr->plr->mo &&
-           plr->playerState != PST_DEAD)
-        {
-            plr->plr->mo->angle += FLT2FIX(mousex * -8); //G_AdjustAngle(plr, mousex * -8, 1);
-        }
-    }
-
-    if(!pausestate)
-    {
-        // Speed based turning.
-        G_AdjustAngle(plr, turn, elapsedTime);
-
-        if(strafe || (!cfg.useMLook && !PLAYER_ACTION(pnum, A_MLOOK)) ||
-           plr->playerState == PST_DEAD)
-        {
-            forward += 8 * mousey * elapsedTics;
-        }
-        else
-        {
-            float adj =
-                (FLT2FIX(mousey * 8) / (float) ANGLE_180) * 180 *
-                110.0 / 85.0;
-
-            if(cfg.mlookInverseY)
-                adj = -adj;
-            plr->plr->lookDir += adj; /* $unifiedangles */
-        }
-        if(cfg.common.useJLook)
-        {
-            if(cfg.common.jLookDeltaMode) /* $unifiedangles */
-                plr->plr->lookDir +=
-                    joylook / 20.0f * cfg.common.lookSpeed *
-                    (cfg.jlookInverseY ? -1 : 1) * elapsedTics;
-            else
-                plr->plr->lookDir =
-                    joylook * 1.1f * (cfg.jlookInverseY ? -1 : 1);
-        }
-    }
-
-    G_ResetMousePos();
-
-#define MAXPLMOVE pClassInfo->maxmove
-
-    if(forward > MAXPLMOVE)
-        forward = MAXPLMOVE;
-    else if(forward < -MAXPLMOVE)
-        forward = -MAXPLMOVE;
-    if(side > MAXPLMOVE)
-        side = MAXPLMOVE;
-    else if(side < -MAXPLMOVE)
-        side = -MAXPLMOVE;
-
-#if __JHEXEN__
-    if(plr->powers[PT_SPEED] && !plr->morphTics)
-    {
-        // Adjust for a player with a speed artifact
-        forward = (3 * forward) >> 1;
-        side = (3 * side) >> 1;
-    }
-#endif
-
-    if(cfg.common.playerMoveSpeed > 1)
-        cfg.common.playerMoveSpeed = 1;
-
-    cmd->forwardMove += forward * cfg.common.playerMoveSpeed;
-    cmd->sideMove += side * cfg.common.playerMoveSpeed;;
-
-    if(cfg.common.lookSpring && !PLAYER_ACTION(pnum, A_MLOOK) &&
-       (cmd->forwardMove > MAXPLMOVE / 3 || cmd->forwardMove < -MAXPLMOVE / 3 ||
-           cmd->sideMove > MAXPLMOVE / 3 || cmd->sideMove < -MAXPLMOVE / 3 ||
-           cstate->mlookPressed))
-    {
-        // Center view when mlook released w/lookspring, or when moving.
-        look = TOCENTER;
-    }
-
-    if(plr->playerState == PST_LIVE && !pausestate)
-        G_AdjustLookDir(plr, look, elapsedTime);
-
-    cmd->fly = flyheight;
-
-    // Store the current mlook key state.
-    cstate->mlookPressed = PLAYER_ACTION(pnum, A_MLOOK);
-}
-#endif
 
 void G_ControlReset(void)
 {

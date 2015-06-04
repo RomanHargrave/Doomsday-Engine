@@ -37,6 +37,8 @@ struct inventoryitem_t
     inventoryitem_t *next;
 };
 
+
+
 struct playerinventory_t
 {
     inventoryitem_t *items[NUM_INVENTORYITEM_TYPES-1];

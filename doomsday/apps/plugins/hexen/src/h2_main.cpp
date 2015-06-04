@@ -68,7 +68,7 @@ char const *borderGraphics[] = {
 
 int X_GetInteger(int id)
 {
-    return Common_GetInteger(id);
+    return common::GetInteger(id);
 }
 
 void *X_GetVariable(int id)

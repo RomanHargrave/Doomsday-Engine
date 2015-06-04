@@ -21,26 +21,31 @@
 #include "common.h"
 #include "g_common.h"
 
-int Common_GetInteger(int id)
+namespace common 
 {
-    switch(id)
-    {
-    case DD_GAME_RECOMMENDS_SAVING:
-        // The engine will use this as a hint whether to remind the user to
-        // manually save the game before, e.g., upgrading to a new version.
-        return G_GameState() == GS_MAP;
 
-    default: break;
+    int GetInteger(int id)
+    {
+        switch(id)
+        {
+        case DD_GAME_RECOMMENDS_SAVING:
+            // The engine will use this as a hint whether to remind the user to
+            // manually save the game before, e.g., upgrading to a new version.
+            return G_GameState() == GS_MAP;
+
+        default: break;
+        }
+
+        return 0;
     }
 
-    return 0;
-}
+    void Register()
+    {
+        // Movement
+        C_VAR_FLOAT("player-move-speed",                    &cfg.common.playerMoveSpeed,               0, 0, 1);
+        C_VAR_INT  ("player-jump",                          &cfg.common.jumpEnabled,                   0, 0, 1);
+        C_VAR_FLOAT("player-jump-power",                    &cfg.common.jumpPower,                     0, 0, 100);
+        C_VAR_BYTE ("player-air-movement",                  &cfg.common.airborneMovement,              0, 0, 32);
+    }
 
-void Common_Register()
-{
-    // Movement
-    C_VAR_FLOAT("player-move-speed",                    &cfg.common.playerMoveSpeed,               0, 0, 1);
-    C_VAR_INT  ("player-jump",                          &cfg.common.jumpEnabled,                   0, 0, 1);
-    C_VAR_FLOAT("player-jump-power",                    &cfg.common.jumpPower,                     0, 0, 100);
-    C_VAR_BYTE ("player-air-movement",                  &cfg.common.airborneMovement,              0, 0, 32);
 }

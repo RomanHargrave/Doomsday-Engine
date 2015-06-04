@@ -23,6 +23,9 @@
 
 using namespace de;
 
+// TODO Modularization: Game rules can be easily modularized,
+//                      preferably through subclassing or provider-based
+//                      extension.
 GameRuleset::GameRuleset()
     : skill(0)
 #if !__JHEXEN__
@@ -155,6 +158,7 @@ void GameRuleset::read(reader_s *reader)
 {
     DENG2_ASSERT(reader != 0);
 
+    // TODO Future: Reader can implement iostream
     skill           = Reader_ReadByte(reader);
     // Interpret skill modes outside the normal range as "spawn no things".
     if(skill < SM_BABY || skill >= NUM_SKILL_MODES)

@@ -77,7 +77,7 @@ static void viewResizeAudioFeedback()
 
 void G_ConsoleRegistration()
 {
-    Common_Register();
+    common::Register();
 
     // View/Refresh
     C_VAR_INT2 ("view-size",                        &cfg.common.setBlocks,                     0, 3, 13, viewResizeAudioFeedback);

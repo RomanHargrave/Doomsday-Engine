@@ -53,7 +53,7 @@
 #  include "hu_inventory.h"
 #endif
 
-#define ANG5                (ANG90/18)
+static float const ANG5 = ANG90 / 18;
 
 dd_bool onground;
 
@@ -764,7 +764,8 @@ dd_bool P_UndoPlayerMorph(player_t* player)
     angle_t angle;
     int playerNum;
     weapontype_t weapon;
-    int oldFlags, oldFlags2, oldBeast;
+    int oldFlags, oldFlags2;
+    mobjtype_t oldBeast;
 
     if(IS_CLIENT) return false;
 
@@ -776,11 +777,20 @@ dd_bool P_UndoPlayerMorph(player_t* player)
     memcpy(pos, pmo->origin, sizeof(pos));
 
     angle = pmo->angle;
-    weapon = pmo->special1;
+    
+    // XXX Heretic thing
+    // TODO Cleanup: special1 and friends are signed integer fields that 
+    //               have whatever C will happily convert to an integer
+    //               stuffed in to them at various points in the game.
+    //               This appears to have been done due to lack of class-like
+    //               data structures in C, as each field serves a different purpose
+    //               depending on the type of map object in question.
+    weapon = static_cast<weapontype_t>(pmo->special1);
+
     oldFlags = pmo->flags;
     oldFlags2 = pmo->flags2;
 # if __JHEXEN__
-    oldBeast = pmo->type;
+    oldBeast = static_cast<mobjtype_t>(pmo->type);
 # else
     oldBeast = MT_CHICPLAYER;
 # endif
@@ -1156,7 +1166,7 @@ void P_PlayerThinkSounds(player_t* player)
 void P_PlayerThinkItems(player_t *player)
 {
 #if __JHERETIC__ || __JHEXEN__
-    inventoryitemtype_t i, type = IIT_NONE; // What to use?
+    inventoryitemtype_t type = IIT_NONE; // What to use?
     int pnum = player - players;
 
     if(player->brain.useInvItem)
@@ -1165,14 +1175,20 @@ void P_PlayerThinkItems(player_t *player)
     }
 
     // Inventory item hot keys.
-    for(i = IIT_FIRST; i < NUM_INVENTORYITEM_TYPES; ++i)
+    for(int typeNum = IIT_FIRST; typeNum < NUM_INVENTORYITEM_TYPES; ++typeNum)
     {
-        def_invitem_t const *def = P_GetInvItemDef(i);
+        // TODO Cleanup: This (and other things like it) need to be refactored away, or
+        //               acomplished in a cleaner fashion
+        //               The cast-to-enum was put here as a temporary shim during C++ 
+        //               conversion 
+        inventoryitemtype_t const itemType = static_cast<inventoryitemtype_t>(typeNum);
+
+        def_invitem_t const *def = P_GetInvItemDef(itemType);
 
         if(def->hotKeyCtrlIdent != -1 &&
            P_GetImpulseControlState(pnum, def->hotKeyCtrlIdent))
         {
-            type = i;
+            type = itemType;
             break;
         }
     }
@@ -1787,7 +1803,7 @@ void P_PlayerThinkUpdateControls(player_t *player)
     for(i = 0; i < NUM_WEAPON_TYPES && (CTL_WEAPON1 + i <= CTL_WEAPON0); i++)
         if(P_GetImpulseControlState(playerNum, CTL_WEAPON1 + i))
         {
-            brain->changeWeapon = i;
+            brain->changeWeapon = static_cast<weapontype_t>(i); // TODO This is a bandaid fix until this can be made in to a proper iteration
             brain->cycleWeapon = +1; // Direction for same-slot cycle.
 #if __JDOOM__ || __JDOOM64__
             if(i == WT_EIGHTH || i == WT_NINETH)

@@ -46,6 +46,7 @@
 using namespace de;
 using namespace common;
 
+// TODO the plugin should specify this
 #if __JHEXEN__
 #  define SOUND_COUNTDOWN       SFX_PICKUP_KEY
 #elif __JDOOM__ || __JDOOM64__
@@ -136,6 +137,11 @@ void NetSv_UpdateGameConfigDescription()
     }
 }
 
+// TODO Modularization: rather than using conditional compilation,
+//                      each plugin should be able to register code
+//                      to be executed on each tick.
+//                      This would be far more idiomatic, and there is
+//                      no excuse not to do so
 void NetSv_Ticker()
 {
     // Map rotation checker.
@@ -1381,7 +1387,7 @@ void NetSv_DoAction(int player, reader_s *msg)
         break;
 
     case GPA_CHANGE_WEAPON:
-        pl->brain.changeWeapon = actionParam;
+        pl->brain.changeWeapon = static_cast<weapontype_t>(actionParam); 
         break;
 
     case GPA_USE_FROM_INVENTORY:

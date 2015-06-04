@@ -29,15 +29,7 @@
 #ifndef __COMMON_PSPRITE_H__
 #define __COMMON_PSPRITE_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 void            HU_UpdatePsprites(void);
 float           HU_PSpriteYOffset(player_t* pl);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
+ 
 #endif

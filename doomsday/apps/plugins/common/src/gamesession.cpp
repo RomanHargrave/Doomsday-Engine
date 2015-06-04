@@ -318,15 +318,15 @@ DENG2_PIMPL(GameSession), public SavedSession::IMapStateReaderFactory
     {
         struct MissileData { mobjtype_t type; dfloat speed[2]; } const missileData[] =
         {
-#if __JDOOM__ || __JDOOM64__
+#   if __JDOOM__ || __JDOOM64__
             { MT_BRUISERSHOT,       { 15, 20 } },
             { MT_HEADSHOT,          { 10, 20 } },
             { MT_TROOPSHOT,         { 10, 20 } },
-# if __JDOOM64__
+#       if __JDOOM64__
             { MT_BRUISERSHOTRED,    { 15, 20 } },
             { MT_NTROSHOT,          { 20, 40 } },
-# endif
-#elif __JHERETIC__
+#       endif
+#   elif __JHERETIC__
             { MT_IMPBALL,           { 10, 20 } },
             { MT_MUMMYFX1,          {  9, 18 } },
             { MT_KNIGHTAXE,         {  9, 18 } },
@@ -341,7 +341,7 @@ DENG2_PIMPL(GameSession), public SavedSession::IMapStateReaderFactory
             { MT_MNTRFX2,           { 14, 20 } },
             { MT_SRCRFX1,           { 20, 28 } },
             { MT_SOR2FX1,           { 20, 28 } },
-#endif
+#   endif
         };
         static bool oldFast = false;
 
@@ -1369,22 +1369,21 @@ acs::System &GameSession::acsSystem()
 }
 
 namespace {
-dint gsvRuleSkill;
-char *gsvEpisode = (char *)"";
-uri_s *gsvMap;
-char *gsvHub = (char *)"";
+    dint gsvRuleSkill;
+    uri_s *gsvMap;
+    char *gsvEpisode   = (char *)"";
+    char *gsvHub       = (char *)"";
 }
 
 void GameSession::consoleRegister()  // static
 {
-#define READONLYCVAR  (CVF_READ_ONLY | CVF_NO_MAX | CVF_NO_MIN | CVF_NO_ARCHIVE)
+    static uint8_t const READONLYCVAR = CVF_READ_ONLY | CVF_NO_MAX | CVF_NO_MIN | CVF_NO_ARCHIVE;
 
     C_VAR_INT    ("game-skill",     &gsvRuleSkill,  READONLYCVAR, 0, 0);
     C_VAR_CHARPTR("map-episode",    &gsvEpisode,    READONLYCVAR, 0, 0);
     C_VAR_CHARPTR("map-hub",        &gsvHub,        READONLYCVAR, 0, 0);
     C_VAR_URIPTR ("map-id",         &gsvMap,        READONLYCVAR, 0, 0);
 
-#undef READONLYCVAR
 }
 
 }  // namespace common

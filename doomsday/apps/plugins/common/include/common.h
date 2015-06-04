@@ -54,15 +54,13 @@
 #include "pause.h"
 #include "p_mapsetup.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-int Common_GetInteger(int id);
-void Common_Register();
-
-#ifdef __cplusplus
-} // extern "C"
+// header is still included in some C sources, but these are not used
+#if defined(__cplusplus)
+namespace common
+{
+    int GetInteger(int id);
+    void Register();
+}
 
 /**
  * Returns the central LumpIndex from the engine. For use with old subsystems
@@ -72,6 +70,7 @@ void Common_Register();
  */
 inline de::LumpIndex const &CentralLumpIndex() { return *reinterpret_cast<de::LumpIndex const *>(F_LumpIndex()); }
 
-#endif
+#endif 
+
 
 #endif // LIBCOMMON_GAME_INCLUDES

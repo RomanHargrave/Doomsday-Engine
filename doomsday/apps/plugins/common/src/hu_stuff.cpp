@@ -48,8 +48,8 @@ using namespace common;
  * @defgroup tableColumnFlags  Table Column flags
  */
 ///@{
-#define CF_HIDE                 0x0001 ///< Column is presently hidden (will be collapsed).
-#define CF_STRETCH_WIDTH        0x0002 ///< Column width is not fixed.
+static uint8_t const CF_HIDE          = 0x0001; ///< Column is presently hidden (will be collapsed).
+static uint8_t const CF_STRETCH_WIDTH = 0x0002; ///< Collumn width is not fixed
 ///@}
 
 /**
@@ -436,7 +436,7 @@ static int populateScoreInfo(scoreinfo_t* scoreBoard, int maxPlayers, int player
                 else
                 {
 #if __JHEXEN__
-                    info->suicides += -plr->frags[j];
+                    info->suicides -= plr->frags[j];
 #else
                     info->suicides += plr->frags[j];
 #endif
@@ -532,7 +532,7 @@ static void drawTable(float x, float ly, float width, float height,
     column_t* columns, scoreinfo_t* scoreBoard, int inCount, float alpha,
     int player)
 {
-#define CELL_PADDING            1
+    static int const CELL_PADDING = 1;
 
     if(!columns) return;
     if(!(alpha > 0)) return;
@@ -676,12 +676,11 @@ static void drawTable(float x, float ly, float width, float height,
         DGL_Disable(DGL_TEXTURE_2D);
     }
 
-#undef CELL_PADDING
 }
 
 static void drawMapMetaData(float x, float y, float alpha)
 {
-#define BORDER              2
+    static int const BORDER = 2;
 
     de::String title = G_MapTitle(COMMON_GAMESESSION->mapUri());
     if(title.isEmpty()) title = "Unnamed";
@@ -692,8 +691,6 @@ static void drawMapMetaData(float x, float y, float alpha)
 
     FR_SetColorAndAlpha(1, 1, 1, alpha);
     FR_DrawTextXY2(buf, x + BORDER, y - BORDER, ALIGN_BOTTOMLEFT);
-
-#undef BORDER
 }
 
 /**
@@ -701,7 +698,7 @@ static void drawMapMetaData(float x, float y, float alpha)
  */
 void HU_DrawScoreBoard(int player)
 {
-#define LINE_BORDER         4
+    static int const LINE_BORDER = 4;
 
     static column_t columns[] = {
         { "cl",       0, 0,                 0,              0, 0 },
@@ -798,8 +795,8 @@ void Hu_Ticker(void)
  */
 void Hu_FogEffectTicker(timespan_t ticLength)
 {
-#define fog                 (&fogEffectData)
-#define FOGALPHA_FADE_STEP (.07f)
+    static float const FOGALPHA_FADE_STEP = 0.07F;
+    fogeffectdata_t* const fog            = &fogEffectData;
 
     static const float MENUFOGSPEED[2] = {.03f, -.085f};
     int i;
@@ -1259,7 +1256,7 @@ void Hu_DrawFogEffect(int effectID, DGLuint tex, float texOffset[2],
 
 static void drawFogEffect(void)
 {
-#define mfd                 (&fogEffectData)
+    fogeffectdata_t* const mfd = &fogEffectData;
 
     DGL_MatrixMode(DGL_MODELVIEW);
     DGL_PushMatrix();
@@ -1276,7 +1273,6 @@ static void drawFogEffect(void)
     DGL_MatrixMode(DGL_MODELVIEW);
     DGL_PopMatrix();
 
-#undef mfd
 }
 
 void Hu_Drawer()

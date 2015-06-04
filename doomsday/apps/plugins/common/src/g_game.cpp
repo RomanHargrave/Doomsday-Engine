@@ -82,11 +82,15 @@ GameRuleset defaultGameRules;
 game_config_t cfg; // The global cfg.
 
 #if __JDOOM__ || __JDOOM64__
-#define BODYQUEUESIZE       (32)
+static int const BODYQUEUESIZE = 32;
 mobj_t *bodyQueue[BODYQUEUESIZE];
 int bodyQueueSlot;
 #endif
 
+// TODO Cleanup: Not knowing based on semantics (name, mainly)
+//               what this does, I do not believe it should be here,
+//               as it exists in the global scope, and is not private to this
+//               source unit
 #if __JDOOM__ || __JHERETIC__ || __JDOOM64__
 bool secretExit;
 #endif
@@ -107,6 +111,13 @@ wbstartstruct_t wmInfo; // Intermission parameters.
 
 de::Uri nextMapUri;
 uint nextMapEntryPoint;
+
+// TODO Cleanup: These are static variables in an implementation unit
+//               This could easily be a source of future issues.
+//               Seeing as a large majority of these describe game state,
+//               they should probably be made non-static members of whatever
+//               data structure defines the game state
+// TODO Future:  All of this should be rewritten in C++
 
 static GameSession session;
 

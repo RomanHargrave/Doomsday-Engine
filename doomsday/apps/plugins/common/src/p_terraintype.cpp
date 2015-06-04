@@ -132,7 +132,7 @@ static __inline terraintype_t* findTerrainTypeForMaterial(Material* mat)
 
 static materialterraintype_t* getMaterialTerrainType(Material* mat, uint idx)
 {
-#define BATCH_SIZE       8
+    static int const BATCH_SIZE = 8;
 
     materialterraintype_t* mtt;
 
@@ -150,17 +150,15 @@ static materialterraintype_t* getMaterialTerrainType(Material* mat, uint idx)
     {
         uint newMax = maxMaterialTTypes + BATCH_SIZE;
 
-        materialTTypes = Z_Realloc(materialTTypes, sizeof(*materialTTypes) * newMax, PU_GAMESTATIC);
+        materialTTypes = (materialterraintype_t*) Z_Realloc(materialTTypes, sizeof(*materialTTypes) * newMax, PU_GAMESTATIC);
         memset(materialTTypes+maxMaterialTTypes, 0, sizeof(*materialTTypes) * (newMax - maxMaterialTTypes));
         maxMaterialTTypes = newMax;
     }
 
-    mtt = &materialTTypes[numMaterialTTypes-1];
-    mtt->material = mat;
+    mtt             = &materialTTypes[numMaterialTTypes-1];
+    mtt->material   = mat;
     mtt->terrainNum = idx - 1;
     return mtt;
-
-#undef BATCH_SIZE
 }
 
 void P_InitTerrainTypes(void)
@@ -204,7 +202,7 @@ void P_InitTerrainTypes(void)
         uint idx = findTerrainTypeNumForName(defs[i].ttName);
         if(!idx) continue;
 
-        mat = P_ToPtr(DMU_MATERIAL, Materials_ResolveUriCString(defs[i].materialUri));
+        mat = (Material*) P_ToPtr(DMU_MATERIAL, Materials_ResolveUriCString(defs[i].materialUri));
         if(!mat) continue;
 
         App_Log(DE2_DEV_RES_VERBOSE, "P_InitTerrainTypes: Material \"%s\" linked to terrain type '%s'",

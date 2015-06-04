@@ -31,7 +31,7 @@
 #include "p_mapsetup.h"
 #include "p_start.h"
 
-#define POBJ_PERPETUAL  0xffffffffu  // -1
+static uint32_t const POBJ_PERPETUAL = 0xFFFFFFFF; // -1
 
 /// @return  Tag of the found polyobj; otherwise @c 0.
 static int findMirrorPolyobj(int tag)

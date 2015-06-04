@@ -32,10 +32,9 @@
 using namespace de;
 using namespace common;
 
-#define PAUSEF_PAUSED           0x1
-#define PAUSEF_FORCED_PERIOD    0x2
-
-#define READONLYCVAR        (CVF_READ_ONLY|CVF_NO_MAX|CVF_NO_MIN|CVF_NO_ARCHIVE)
+static uint8_t const PAUSEF_PAUSED        = 0x1;
+static uint8_t const PAUSEF_FORCED_PERIOD = 0x2;
+static uint8_t const READONLYCVAR         = CVF_READ_ONLY | CVF_NO_MAX | CVF_NO_MIN | CVF_NO_ARCHIVE;
 
 int paused;
 

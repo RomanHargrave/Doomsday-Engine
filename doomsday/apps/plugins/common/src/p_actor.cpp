@@ -29,9 +29,9 @@
 #include "p_actor.h"
 
 #if __JDOOM64__
-# define RESPAWNTICS            (4 * TICSPERSEC)
+static int const RESPAWNTICS = 4 * TICSPERSEC;
 #else
-# define RESPAWNTICS            (30 * TICSPERSEC)
+static int const RESPAWNTICS = 30 * TICSPERSEC;
 #endif
 
 typedef struct spawnqueuenode_s {
@@ -140,8 +140,8 @@ void P_MobjSetSRVOZ(mobj_t *mo, coord_t stepz)
 
 void P_MobjAngleSRVOTicker(mobj_t *mo)
 {
-#define MIN_STEP (10 * ANGLE_1) >> 16 ///< Degrees per tic
-#define MAX_STEP ANG90 >> 16
+    static int const MIN_STEP = (10 * ANGLE_1) >> 16; ///< Degrees per tic
+    static int const MAX_STEP = ANG90 >> 16;
 
     DENG_ASSERT(mo != 0);
 
@@ -184,8 +184,6 @@ void P_MobjAngleSRVOTicker(mobj_t *mo)
     else if(diff < 0)
         mo->visAngle -= step;
 
-#undef MAX_STEP
-#undef MIN_STEP
 }
 
 void P_MobjClearSRVO(mobj_t *mo)
@@ -278,8 +276,7 @@ void P_RipperBlood(mobj_t *actor)
 
 static spawnqueuenode_t *allocateNode()
 {
-#define SPAWNQUEUENODE_BATCHSIZE 32
-
+    static int const SPAWNQUEUENODE_BATCHSIZE = 32;
     spawnqueuenode_t *node;
 
     if(unusedNodes)
@@ -307,8 +304,6 @@ static spawnqueuenode_t *allocateNode()
     }
 
     return node;
-
-#undef SPAWNQUEUENODE_BATCHSIZE
 }
 
 static void freeNode(spawnqueuenode_t *node, bool recycle)

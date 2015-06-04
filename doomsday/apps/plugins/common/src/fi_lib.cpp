@@ -67,6 +67,8 @@ static uint finaleStackSize;
 static fi_state_t *finaleStack;
 static fi_state_t remoteFinaleState; // For the client.
 
+// TODO Modularization: This is almost entirely a plugin-specific method
+//                      why is this here?
 static void initStateConditions(fi_state_t &s)
 {
     // Set the presets.
@@ -243,6 +245,10 @@ void FI_StackExecute(char const *scriptSrc, int flags, finale_mode_t mode)
     FI_StackExecuteWithId(scriptSrc, flags, mode, NULL);
 }
 
+// TODO Modularization: each game plugin has a specific set of finaly commands
+//                      therefore, the game plugin should be able to register
+//                      finaly logic to be executed, rather than rely on this 
+//                      being correct.
 void FI_StackExecuteWithId(char const *scriptSrc, int flags, finale_mode_t mode, char const *defId)
 {
     DENG2_ASSERT(finaleStackInited);
@@ -465,6 +471,9 @@ int Hook_FinaleScriptTicker(int /*hookType*/, int finaleId, void *context)
     return true;
 }
 
+// TODO Modularization: either all player class logic needs to be moved in to hexen,
+//                      or class support needs to be generified and extensible, and 
+//                      made available to _all_ game plugins
 #if __JHEXEN__
 static int playerClassForName(char const *name)
 {
@@ -478,6 +487,7 @@ static int playerClassForName(char const *name)
 }
 #endif
 
+// TODO Modularization: See note on FI_StackExecute
 int Hook_FinaleScriptEvalIf(int /*hookType*/, int finaleId, void *context)
 {
     ddhook_finale_script_evalif_paramaters_t* p = static_cast<ddhook_finale_script_evalif_paramaters_t *>(context);

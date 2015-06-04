@@ -107,35 +107,39 @@ enum {
 // This structure replaced ticcmd as the place where players store the intentions
 // of their human operators.
 typedef struct playerbrain_s {
-    float       forwardMove;        // 1.0 for maximum movement
-    float       sideMove;           // 1.0 for maximum movement
-    float       upMove;             // 1.0 for maximum movement
-    int         changeWeapon;       // WT_NOCHANGE, or the weapon to change to
-    int         cycleWeapon;        // +1 or -1
+    float           forwardMove;        // 1.0 for maximum movement
+    float           sideMove;           // 1.0 for maximum movement
+    float           upMove;             // 1.0 for maximum movement
+
+    // XXX  weapontype_t is defined in plugins, however C++ (with the current settings)
+    //      does not allow (implicit) conversion from an integer to whatever weapontype_t should be
+    //      (which is an enum) like C does
+    weapontype_t    changeWeapon;       // WT_NOCHANGE, or the weapon to change to
+    int             cycleWeapon;        // +1 or -1 
 #if __JHERETIC__ || __JHEXEN__
-    int         cycleInvItem;       // +1 or -1
+    int             cycleInvItem;       // +1 or -1
 #endif
     // Bits:
-    uint        speed : 1;
-    uint        use : 1;
-    uint        lunge : 1;
-    uint        attack : 1;
-    uint        lookCenter : 1;
-    uint        fallDown : 1;
-    uint        jump : 1;
-    uint        mapToggle : 1;
-    uint        mapZoomMax : 1;
-    uint        mapFollow : 1;
-    uint        mapRotate : 1;
-    uint        mapMarkAdd : 1;
-    uint        mapMarkClearAll : 1;
-    uint        hudShow : 1;
-    uint        scoreShow : 1;
-    uint        doReborn: 1; // Set when the player wishes to be reborn.
+    uint            speed           : 1;       
+    uint            use             : 1;       
+    uint            lunge           : 1;       
+    uint            attack          : 1;       
+    uint            lookCenter      : 1;       
+    uint            fallDown        : 1;       
+    uint            jump            : 1;       
+    uint            mapToggle       : 1;       
+    uint            mapZoomMax      : 1;       
+    uint            mapFollow       : 1;       
+    uint            mapRotate       : 1;       
+    uint            mapMarkAdd      : 1;       
+    uint            mapMarkClearAll : 1;       
+    uint            hudShow         : 1;       
+    uint            scoreShow       : 1;       
+    uint            doReborn        : 1; // Set when the player wishes to be reborn.
 #if __JHERETIC__ || __JHEXEN__
-    uint        useInvItem: 1;
+    uint            useInvItem      : 1;
 #endif
-    uint        logRefresh: 1;
+    uint            logRefresh      : 1;
 } playerbrain_t;
 
 #ifdef __cplusplus

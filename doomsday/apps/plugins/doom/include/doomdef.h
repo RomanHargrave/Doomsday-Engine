@@ -126,15 +126,17 @@ typedef enum {
 
 #define PCLASS_INFO(plrClass)  (&classInfo[plrClass])
 
-typedef struct classinfo_s{
+typedef struct classinfo_s {
     playerclass_t plrClass;
     char*       niceName;
     dd_bool     userSelectable;
     mobjtype_t  mobjType;
-    int         normalState;
-    int         runState;
-    int         attackState;
-    int         attackEndState;
+    
+    statenum_t  normalState;
+    statenum_t  runState;
+    statenum_t  attackState;
+    statenum_t  attackEndState;
+
     int         maxArmor;
     fixed_t     maxMove;
     fixed_t     forwardMove[2]; // [walk, run].

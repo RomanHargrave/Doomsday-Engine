@@ -38,10 +38,10 @@
 #include "p_saveg.h"
 #include "player.h"
 
-#define DROPOFFMOMENTUM_THRESHOLD (1.0 / 4)
+static float const DROPOFFMOMENTUM_THRESHOLD = 1.0F / 4.0F;
 
 /// Threshold for stopping walk animation.
-#define STANDSPEED              (1.0 / 2) // FIX2FLT(0x8000)
+static float const STANDSPEED = 1.0F / 2.0F;
 
 coord_t Mobj_ThrustMulForFriction(coord_t friction)
 {
@@ -53,6 +53,7 @@ coord_t Mobj_ThrustMulForFriction(coord_t friction)
 
     // Decrease thrust exponentially when nearing friction == 1.0.
     // {c = -93.31092643, b = 208.0448223, a = -114.7338958}
+    // TODO powf? (friction * friction = friction ** 2)
     return (-114.7338958 * friction * friction + 208.0448223 * friction - 93.31092643);
 }
 
@@ -406,11 +407,9 @@ dd_bool P_MobjChangeStateNoAction(mobj_t *mobj, statenum_t stateNum)
 }
 
 #if __JHEXEN__
-# define MOBJ_SAVEVERSION 8
-#elif __JHERETIC__
-# define MOBJ_SAVEVERSION 10
+static int const MOBJ_SAVEVERSION = 8;
 #else
-# define MOBJ_SAVEVERSION 10
+static int const MOBJ_SAVEVERSION = 10;
 #endif
 
 void mobj_s::write(MapStateWriter *msw) const
@@ -627,8 +626,8 @@ void mobj_s::write(MapStateWriter *msw) const
 
 int mobj_s::read(MapStateReader *msr)
 {
-#define FF_FULLBRIGHT 0x8000 ///< Used to be a flag in thing->frame.
-#define FF_FRAMEMASK  0x7fff
+    static uint16_t const FF_FULLBRIGHT = 0x8000;
+    static uint16_t const FF_FRAMEMASK  = 0x7FFF;
 
     Reader *reader = msr->reader();
 
@@ -941,9 +940,6 @@ int mobj_s::read(MapStateReader *msr)
     ceilingZ = P_GetDoublep(Mobj_Sector(this), DMU_CEILING_HEIGHT);
 
     return false;
-
-#undef FF_FRAMEMASK
-#undef FF_FULLBRIGHT
 }
 
 mobj_t *Mobj_ExplodeIfObstructed(mobj_t *mob)

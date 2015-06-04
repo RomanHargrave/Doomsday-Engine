@@ -33,35 +33,35 @@
 using namespace de;
 
 // How many inventory slots are visible in the fixed-size inventory.
-#define NUMVISINVSLOTS      (7)
+static int const NUMVISINVSLOTS = 7;
 
-#define ST_INVENTORYHEIGHT  (30)
-#define ST_INVSLOTWIDTH     (31)
+static int const ST_INVENTORYHEIGHT = 30;
+static int const ST_INVSLOTWIDTH = 31;
 
 // Inventory item counts (relative to each slot).
-#define ST_INVCOUNTDIGITS   (2)
+static int const ST_INVCOUNTDIGITS = 2;
 
+// TODO Modularization: These constants needs to be outsourced to the game plugin
+//                      this should be accomplished most preferably by the game plugin
+//                      actively calling a setter, though it could supposedly also
+//                      be accomplished by qualifying these as external, and then declaring
+//                      them in the plugin code.
 #if __JHERETIC__
-#define ST_INVICONOFFY      (0)
-
-#define ST_INVCOUNTOFFX     (27)
-#define ST_INVCOUNTOFFY     (22)
-
-#define ST_INVSLOTOFFX      (1)
-#define ST_INVSELECTOFFY    (ST_INVENTORYHEIGHT)
+static int const ST_INVICONOFFY   = 0;
+static int const ST_INVCOUNTOFFX  = 27;
+static int const ST_INVCOUNTOFFY  = 22;
+static int const ST_INVSELECTOFFY = ST_INVENTORYHEIGHT;
 #else
-#define ST_INVICONOFFY      (-1)
-
-#define ST_INVCOUNTOFFX     (28)
-#define ST_INVCOUNTOFFY     (22)
-
-#define ST_INVSLOTOFFX      (1)
-#define ST_INVSELECTOFFY    (1)
+static int const ST_INVICONOFFY   = -1;
+static int const ST_INVCOUNTOFFX  = 28;
+static int const ST_INVCOUNTOFFY  = 22;
+static int const ST_INVSELECTOFFY = 1;
 #endif
+static int const ST_INVSLOTOFFX   = 1;
 
 // HUD Inventory Flags:
-#define HIF_VISIBLE         0x1
-#define HIF_IS_DIRTY        0x8
+static uint8_t const HIF_VISIBLE  = 0x1;
+static uint8_t const HIF_IS_DIRTY = 0x8;
 
 struct hud_inventory_t
 {
@@ -242,11 +242,13 @@ static void inventoryIndexes(player_t const * /*plr*/, hud_inventory_t const *in
 
 void Hu_InventoryDraw(int player, int x, int y, float textOpacity, float iconOpacity)
 {
-#define BORDER                  (1)
-#if __JHERETIC__
-# define TRACKING               (2)
+    static int const BORDER        = 1;
+    static int const ARROW_RELXOFF = 2;
+    static int const ARROW_YOFFSET = 9;
+#if defined(__JHERETIC__)
+    static int const TRACKING      = 2;
 #else
-# define TRACKING               (0)
+    static int const TRACKING      = 0;
 #endif
 
     if(player < 0 || player >= MAXPLAYERS) return;
@@ -282,7 +284,7 @@ void Hu_InventoryDraw(int player, int x, int y, float textOpacity, float iconOpa
             to = from + inv->numUsedSlots;
     }
 
-Draw_BeginZoom(invScale, x, y + ST_INVENTORYHEIGHT);
+    Draw_BeginZoom(invScale, x, y + ST_INVENTORYHEIGHT);
 
     x -= (numVisSlots * ST_INVSLOTWIDTH) / 2.f;
 
@@ -309,11 +311,10 @@ Draw_BeginZoom(invScale, x, y + ST_INVENTORYHEIGHT);
             uint count            = P_InventoryCount(player, item->type);
             if(count)
             {
-#if __JHEXEN__
-                int posX = x + slot * ST_INVSLOTWIDTH + (slot > 1? (slot-1) * ST_INVSLOTOFFX : 0) - 1;
-#else
                 int posX = x + slot * ST_INVSLOTWIDTH + (slot > 1? (slot-1) * ST_INVSLOTOFFX : 0);
-#endif
+#if defined(__JHEXEN__)
+                posX -= 1;
+#endif 
                 DGL_Color4f(1, 1, 1, slot == selected? iconOpacity : iconOpacity / 2);
                 GL_DrawPatch(item->patchId, Vector2i(posX, y + ST_INVICONOFFY));
 
@@ -337,8 +338,6 @@ Draw_BeginZoom(invScale, x, y + ST_INVENTORYHEIGHT);
 
     if(inv->numUsedSlots > maxVisSlots)
     {
-#define ARROW_RELXOFF          2
-#define ARROW_YOFFSET          9
 
         if(cfg.inventoryWrap || first != 0)
         {
@@ -351,26 +350,23 @@ Draw_BeginZoom(invScale, x, y + ST_INVENTORYHEIGHT);
             DGL_Color4f(1, 1, 1, iconOpacity);
             GL_DrawPatch(pInvPageRight[!(mapTime & 4)? 1 : 0], Vector2i(x + numVisSlots * ST_INVSLOTWIDTH + (numVisSlots > 1? (numVisSlots-1) * ST_INVSLOTOFFX : 0) + ARROW_RELXOFF - 2, y + ARROW_YOFFSET));
         }
-
-#undef ARROW_XOFFSET
-#undef ARROW_YOFFSET
     }
 
     DGL_Disable(DGL_TEXTURE_2D);
 
 Draw_EndZoom();
 
-#undef TRACKING
-#undef BORDER
 }
 
 void Hu_InventoryDraw2(int player, int x, int y, float alpha)
 {
-#define BORDER                  (1)
-#if __JHERETIC__
-# define TRACKING               (2)
+    static int const BORDER        = 1;
+    static int const ARROW_RELXOFF = 2;
+    static int const ARROW_YOFFSET = 9;
+#if defined(__JHERETIC__)
+    static int const TRACKING      = 2;
 #else
-# define TRACKING               (0)
+    static int const TRACKING      = 0;
 #endif
 
     if(alpha <= 0) return;
@@ -446,9 +442,6 @@ void Hu_InventoryDraw2(int player, int x, int y, float alpha)
     }
 
     DGL_Disable(DGL_TEXTURE_2D);
-
-#undef TRACKING
-#undef BORDER
 }
 
 static void inventoryMove(hud_inventory_t *inv, int dir, dd_bool canWrap)

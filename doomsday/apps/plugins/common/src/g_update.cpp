@@ -36,8 +36,15 @@
 
 using namespace common;
 
-#define MANGLE_STATE(x)     (INT2PTR(state_t, ((x)? (x)-STATES : -1)))
-#define RESTORE_STATE(x)    (PTR2INT(x) < 0? NULL : &STATES[PTR2INT(x)])
+static inline state_t* MANGLE_STATE(state_t* state) 
+{
+    return INT2PTR(state_t, state ? state - STATES : -1);
+}
+
+static inline state_t* RESTORE_STATE(state_t* state)
+{
+    return PTR2INT(state) <  0 ? nullptr : &STATES[PTR2INT(state)];
+}
 
 static int mangleMobj(thinker_t *th, void * /*context*/)
 {
