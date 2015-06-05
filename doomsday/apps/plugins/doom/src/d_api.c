@@ -30,20 +30,9 @@
 #include <string.h>
 
 #include "doomsday.h"
-
-#include "jdoom.h"
-
-#include "d_netsv.h"
-#include "d_net.h"
-#include "fi_lib.h"
-#include "g_common.h"
 #include "g_update.h"
-#include "hu_menu.h"
 #include "p_map.h"
-#include "p_mapsetup.h"
 #include "r_common.h"
-#include "p_map.h"
-#include "p_tick.h"
 #include "polyobjs.h"
 
 #define GID(v)          (toGameId(v))
@@ -65,9 +54,9 @@ static __inline gameid_t toGameId(int gamemode)
  */
 int G_RegisterGames(int hookType, int param, void *data)
 {
-#define STARTUPPK3              PLUGIN_NAMETEXT2 ".pk3"
-#define LEGACYSAVEGAMENAMEEXP   "^(?:DoomSav)[0-9]{1,1}(?:.dsg)"
-#define LEGACYSAVEGAMESUBFOLDER "savegame"
+    static char* const STARTUPPK3 = PLUGIN_NAMETEXT2 ".pk3";
+    static char* const LEGACYSAVEGAMENAMEEXP = "^(?:DoomSav)[0-9]{1,1}(?:.dsg)";
+    static char* const LEGACYSAVEGAMESUBFOLDER = "savegame";
 
     GameDef const hacxDef = {
         "hacx", "hacx",
@@ -168,8 +157,6 @@ int G_RegisterGames(int hookType, int param, void *data)
     DD_AddGameResource(GID(doom_shareware), RC_PACKAGE, FF_STARTUP, "doom1.wad", "E1M1;E1M2;E1M3;E1M4;E1M5;E1M6;E1M7;E1M8;E1M9;D_E1M1;FLOOR4_8;FLOOR7_2");
     DD_AddGameResource(GID(doom_shareware), RC_DEFINITION, 0, "doom1-share.ded", 0);
     return true;
-
-#undef STARTUPPK3
 }
 
 /**
@@ -201,16 +188,22 @@ void DP_Unload(void)
 void G_PreInit(gameid_t gameId)
 {
     /// \todo Refactor me away.
-    { size_t i;
-    for(i = 0; i < NUM_GAME_MODES; ++i)
-        if(gameIds[i] == gameId)
+    {
+        size_t i;
+        for(i = 0; i < NUM_GAME_MODES; ++i)
         {
-            gameMode = (gamemode_t) i;
-            gameModeBits = 1 << gameMode;
-            break;
+            if(gameIds[i] == gameId)
+            {
+                gameMode = (gamemode_t) i;
+                gameModeBits = 1 << gameMode;
+                break;
+            }
         }
-    if(i == NUM_GAME_MODES)
-        Con_Error("Failed gamemode lookup for id %i.", gameId);
+
+        if(i == NUM_GAME_MODES)
+        {
+            Con_Error("Failed gamemode lookup for id %i.", gameId);
+        }
     }
 
     D_PreInit();
