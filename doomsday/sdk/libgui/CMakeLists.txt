@@ -22,7 +22,7 @@ option (DENG_ENABLE_DISPLAYMODE "Enable/disable changing the display mode"
 )
 
 # Dependencies.
-find_package (DengCore QUIET)
+find_package (DengCore)
 find_package (Assimp REQUIRED)
 include (OpenGL)
 
@@ -82,5 +82,10 @@ if (DENG_X11)
 endif ()
 
 deng_deploy_library (libgui DengGui)
+
+# If Assimp is part of the build, ensure that it gets compiled before libgui.
+if (TARGET assimp)
+    add_dependencies (libgui assimp)
+endif ()
 
 deng_cotire (libgui src/precompiled.h)
