@@ -39,6 +39,10 @@ typedef struct {
 
 DENG_EXTERN_C actionlink_t actionlinks[];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void C_DECL A_BabyMetal();
 void C_DECL A_BFGsound();
 void C_DECL A_BFGSpray();
@@ -123,5 +127,9 @@ void C_DECL A_VileStart();
 void C_DECL A_VileTarget();
 void C_DECL A_WeaponReady();
 void C_DECL A_XScream();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
