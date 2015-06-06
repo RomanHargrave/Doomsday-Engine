@@ -29,6 +29,6 @@
 /**
  * Applies "torque" to objects, based on all contacted lines.
  */
-void P_ApplyTorque(mobj_t *mobj);
+DENG_EXTERN_C void P_ApplyTorque(mobj_t *mobj);
 
 #endif // LIBDOOM_P_MAPUTL_H

@@ -23,10 +23,9 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <include/d_config.h>
 #include <include/p_mobj.h>
 #include <include/d_api.h>
-#include <include/d_config.h>
-
 #include "dmu_lib.h"
 
 /**
@@ -52,9 +51,13 @@ static int PIT_ApplyTorque(Line *ld, void *context)
     if(torqueMobj->player)
         return false; // Skip players!
 
-    if(!(frontsec = P_GetPtrp(ld, DMU_FRONT_SECTOR)) ||
-       !(backsec  = P_GetPtrp(ld, DMU_BACK_SECTOR)))
+    frontsec = (Sector*) P_GetPtrp(ld, DMU_FRONT_SECTOR);
+    backsec = (Sector*) P_GetPtrp(ld, DMU_BACK_SECTOR);
+
+    if(!frontsec || !backsec) {
         return false; // Shouldn't ever happen.
+        // TODO this should be an assertion if it should never happen
+    }
 
     ffloor = P_GetDoublep(frontsec, DMU_FLOOR_HEIGHT);
     bfloor = P_GetDoublep(backsec, DMU_FLOOR_HEIGHT);

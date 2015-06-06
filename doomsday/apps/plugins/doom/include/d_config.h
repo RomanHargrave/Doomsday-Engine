@@ -36,8 +36,6 @@
 
 #include "api_uri.h"
 #include "doomdef.h"
-//#include "hu_lib.h"
-#include "../../common/include/config.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,6 +64,17 @@ typedef enum {
     HUE_ON_PICKUP_KEY,
     NUMHUDUNHIDEEVENTS
 } hueevent_t;
+
+#ifdef __cplusplus
+}
+#endif
+
+// XXX This has to be included here, as it includes jdoom.h (this should be deleted) which includes p_maputil.h which needs hueevent_t 
+#include "../../common/include/config.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Counter Cheat flags.
 #define CCH_KILLS           0x01
@@ -133,5 +142,6 @@ extern game_config_t cfg;
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
 
 #endif
