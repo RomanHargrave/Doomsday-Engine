@@ -19,11 +19,9 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 #include "p_lights.h"
 
 #include "dmu_lib.h"
-#include "p_mapspec.h"
 
 static float phaseTable[64] = {
     .5, .4375, .375, .3125, .25, .1875, .125, .125,

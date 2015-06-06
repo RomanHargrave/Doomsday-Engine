@@ -19,10 +19,6 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
-#include "m_cheat.h"
-
-#include <cerrno>
 #include <cstdlib>
 #include "d_net.h"
 #include "d_netcl.h"
@@ -33,8 +29,6 @@
 #include "gamesession.h"
 #include "hu_msg.h"
 #include "p_inventory.h"
-#include "p_user.h"
-#include "player.h"
 
 typedef eventsequencehandler_t cheatfunc_t;
 

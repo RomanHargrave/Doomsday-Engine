@@ -19,11 +19,7 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
-#include "p_things.h"
-
 #include "g_common.h"
-#include "mobj.h"
 #include "p_map.h"
 
 static dd_bool ActivateThing(mobj_t *mobj);

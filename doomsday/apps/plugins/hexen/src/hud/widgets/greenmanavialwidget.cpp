@@ -18,9 +18,9 @@
  * 02110-1301 USA</small>
  */
 
+#include <include/g_game.h>
 #include "hud/widgets/greenmanavialwidget.h"
 
-#include "jhexen.h"
 #include "gl_drawpatch.h"
 #include "hu_inventory.h"
 

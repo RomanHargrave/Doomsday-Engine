@@ -18,21 +18,10 @@
  * 02110-1301 USA</small>
  */
 
-#include <cstring>
-
-#include "jhexen.h"
-
 #include "dmu_lib.h"
-#include "g_controls.h"
 #include "g_common.h"
-#include "hu_menu.h"
-#include "hu_msg.h"
 #include "hu_pspr.h"
 #include "hu_stuff.h"
-#include "p_mapsetup.h"
-#include "p_tick.h"
-#include "r_common.h"
-#include "x_hair.h"
 
 float quitDarkenOpacity = 0;
 

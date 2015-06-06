@@ -18,9 +18,10 @@
  * 02110-1301 USA</small>
  */
 
+#include <include/h2def.h>
+#include <include/g_game.h>
 #include "hud/widgets/bluemanaiconwidget.h"
 
-#include "jhexen.h"
 #include "gl_drawpatch.h"
 #include "hu_inventory.h"
 

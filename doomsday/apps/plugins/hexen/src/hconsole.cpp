@@ -18,13 +18,9 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 #include "d_net.h"
 #include "hu_menu.h"
-#include "hu_stuff.h"
 #include "g_common.h"
-#include "g_controls.h"
-#include "p_inventory.h"
 
 using namespace common;
 

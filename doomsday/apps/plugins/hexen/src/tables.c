@@ -24,6 +24,8 @@
  * Boston, MA  02110-1301  USA
  */
 
+#include <de/types.h>
+
 /**
  * tables.c:
  *
@@ -31,7 +33,6 @@
  * a complete drop in replacement. - Yagisan
  */
 
-#include "jhexen.h"
 
 int     finetangent[4096] = {
     -170910304, -56965752, -34178904, -24413316, -18988036, -15535599,

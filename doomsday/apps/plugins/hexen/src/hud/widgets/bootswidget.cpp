@@ -18,14 +18,14 @@
  * 02110-1301 USA</small>
  */
 
+#include <include/g_game.h>
 #include "hud/widgets/bootswidget.h"
 
-#include "jhexen.h"
 #include "gl_drawpatch.h"
 
 using namespace de;
 
-#define FRAME_COUNT             ( 16 )  ///< min 1
+static int const FRAME_COUNT = 16;
 
 static patchid_t pIcon[FRAME_COUNT];
 

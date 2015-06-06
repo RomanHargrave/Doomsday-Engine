@@ -26,23 +26,7 @@
  * acfnlink.c:
  */
 
-// HEADER FILES ------------------------------------------------------------
-
-#include "jhexen.h"
-
-// MACROS ------------------------------------------------------------------
-
-// TYPES -------------------------------------------------------------------
-
-// EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
-
-// PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
-
-// PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
-
-// EXTERNAL DATA DECLARATIONS ----------------------------------------------
-
-// PUBLIC DATA DEFINITIONS -------------------------------------------------
+#include <include/acfnlink.h>
 
 actionlink_t actionlinks[] = {
     {"A_AddPlayerCorpse",   A_AddPlayerCorpse},

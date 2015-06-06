@@ -18,9 +18,9 @@
  * 02110-1301 USA</small>
  */
 
+#include <include/g_game.h>
 #include "hud/widgets/bluemanawidget.h"
 
-#include "jhexen.h"
 #include "hu_inventory.h"
 
 using namespace de;

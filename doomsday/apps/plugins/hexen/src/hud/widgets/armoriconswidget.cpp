@@ -18,9 +18,12 @@
  * 02110-1301 USA</small>
  */
 
+#include <include/x_api.h>
+#include <pause.h>
+#include <include/x_player.h>
+#include <include/g_game.h>
 #include "hud/widgets/armoriconswidget.h"
 
-#include "jhexen.h"
 #include "gl_drawpatch.h"
 #include "hu_inventory.h"
 

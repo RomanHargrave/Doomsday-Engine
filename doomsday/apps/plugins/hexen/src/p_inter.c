@@ -22,19 +22,14 @@
 #include <string.h>
 #include <math.h>
 
-#include "jhexen.h"
 #include "p_inter.h"
 
 #include "d_netsv.h"
 #include "g_common.h"
-#include "hu_inventory.h"
-#include "mobj.h"
 #include "p_inventory.h"
-#include "p_map.h"
 #include "p_user.h"
-#include "player.h"
 
-#define BONUSADD                (6)
+static int const BONUSADD = 6;
 
 typedef enum {
     IT_NONE = -1,

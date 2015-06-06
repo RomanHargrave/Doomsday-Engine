@@ -31,8 +31,6 @@
 
 #include <string.h>
 
-#include "jhexen.h"
-
 #include "dmu_lib.h"
 #include "g_common.h"
 #include "p_map.h"

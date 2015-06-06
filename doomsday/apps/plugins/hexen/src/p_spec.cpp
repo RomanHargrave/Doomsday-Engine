@@ -19,27 +19,18 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 #include "p_spec.h"
 
-#include <cstdio>
-#include <cstring>
 #include "acs/system.h"
 #include "dmu_lib.h"
-#include "d_netsv.h"
 #include "g_common.h"
 #include "gamesession.h"
 #include "lightninganimator.h"
 #include "p_inventory.h"
-#include "player.h"
-#include "p_map.h"
-#include "p_mapsetup.h"
-#include "p_mapspec.h"
 #include "p_ceiling.h"
 #include "p_door.h"
 #include "p_plat.h"
 #include "p_floor.h"
-#include "p_scroll.h"
 #include "p_switch.h"
 #include "p_user.h"
 #include "polyobjs.h"

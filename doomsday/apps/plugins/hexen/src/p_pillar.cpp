@@ -19,12 +19,10 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 #include "p_pillar.h"
 
 #include "dmu_lib.h"
 #include "p_mapspec.h"
-#include "p_iterlist.h"
 
 void T_BuildPillar(pillar_t *pillar)
 {

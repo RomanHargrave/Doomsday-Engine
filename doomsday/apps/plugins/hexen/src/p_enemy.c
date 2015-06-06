@@ -23,7 +23,6 @@
 #include <math.h>
 #include <assert.h>
 
-#include "jhexen.h"
 #include "p_enemy.h"
 
 #include "d_net.h"
@@ -33,42 +32,43 @@
 #include "p_map.h"
 #include "p_mapspec.h"
 
-#define MONS_LOOK_RANGE             (16*64)
-#define MONS_LOOK_LIMIT             64
+static int const MONS_LOOK_RANGE = 16 * 64;
+static int const MONS_LOOK_LIMIT = 64;
 
-#define MINOTAUR_LOOK_DIST          (16*54)
+static int const MINOTAUR_LOOK_DIST = 16 * 54;
 
-#define CORPSEQUEUESIZE             64
-#define BODYQUESIZE                 32
+static int const CORPSEQUEUESIZE = 64;
+static int const BODYQUESIZE = 32;
 
-#define SORCBALL_INITIAL_SPEED      7
-#define SORCBALL_TERMINAL_SPEED     25
-#define SORCBALL_SPEED_ROTATIONS    5
-#define SORC_DEFENSE_TIME           255
-#define SORC_DEFENSE_HEIGHT         45
-#define BOUNCE_TIME_UNIT            (TICSPERSEC/2)
-#define SORCFX4_RAPIDFIRE_TIME      (6*3) // 3 seconds
-#define SORCFX4_SPREAD_ANGLE        20
+static int const SORCBALL_INITIAL_SPEED = 7;
+static int const SORCBALL_TERMINAL_SPEED = 25;
+static int const SORCBALL_SPEED_ROTATIONS = 5;
+static int const SORC_DEFENSE_TIME = 255;
+static int const SORC_DEFENSE_HEIGHT = 45;
+static int const BOUNCE_TIME_UNIT = TICSPERSEC / 2;
+static int const SORCFX4_RAPIDFIRE_TIME = 6 * 3;
+static int const SORCFX4_SPREAD_ANGLE = 20;
 
-#define SORC_DECELERATE             0
-#define SORC_ACCELERATE             1
-#define SORC_STOPPING               2
-#define SORC_FIRESPELL              3
-#define SORC_STOPPED                4
-#define SORC_NORMAL                 5
-#define SORC_FIRING_SPELL           6
+typedef enum {
+    SORC_DECELERATE = 0,
+    SORC_ACCELERATE,
+    SORC_STOPPING,
+    SORC_FIRESPELL,
+    SORC_STOPPED,
+    SORC_NORMAL,
+    SORC_FIRING_SPELL
+} sorcerer_movement_state_t;
 
-#define BALL1_ANGLEOFFSET           0
-#define BALL2_ANGLEOFFSET           (ANGLE_MAX/3)
-#define BALL3_ANGLEOFFSET           ((ANGLE_MAX/3)*2)
+static float const BALL1_ANGLEOFFSET = 0;
+static float const BALL2_ANGLEOFFSET = ANGLE_MAX / 3.0F;
+static float const BALL3_ANGLEOFFSET = (ANGLE_MAX / 3.0F) * 2;
 
-#define KORAX_SPIRIT_LIFETIME       (5*(TICSPERSEC/5))  // 5 seconds
-#define KORAX_COMMAND_HEIGHT        (120)
-#define KORAX_COMMAND_OFFSET        (27)
+static int const KORAX_SPIRIT_LIFETIME = 5 * (TICSPERSEC / 5);
+static int const KORAX_COMMAND_HEIGHT = 120;
+static int const KORAX_COMMAND_OFFSET = 27;
 
-#define KORAX_TID                   (245)
-#define KORAX_FIRST_TELEPORT_TID    (248)
-#define KORAX_TELEPORT_TID          (249)
+static int const KORAX_FIRST_TELEPORT_TID = 248;
+static int const KORAX_TELEPORT_TID = 249;
 
 /**
  * Describes a relative spawn point for a missile (POD).

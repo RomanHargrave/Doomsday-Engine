@@ -19,13 +19,11 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 #include "p_waggle.h"
 
 #include "dmu_lib.h"
 #include "p_map.h"
 #include "p_mapspec.h"
-#include "p_iterlist.h"
 
 void T_FloorWaggle(waggle_t *waggle)
 {

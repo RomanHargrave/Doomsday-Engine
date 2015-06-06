@@ -27,25 +27,7 @@
  * m_random.c: Random number LUT.
  */
 
-// HEADER FILES ------------------------------------------------------------
-
-#include "jhexen.h"
-
-// MACROS ------------------------------------------------------------------
-
-// TYPES -------------------------------------------------------------------
-
-// EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
-
-// PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
-
-// PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
-
-// EXTERNAL DATA DECLARATIONS ----------------------------------------------
-
-// PUBLIC DATA DEFINITIONS -------------------------------------------------
-
-// PRIVATE DATA DEFINITIONS ------------------------------------------------
+#include <de/types.h>
 
 // This is the new flat distribution table
 static unsigned char rndTable[256] = {

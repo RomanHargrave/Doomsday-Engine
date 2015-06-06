@@ -18,7 +18,11 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
+
+#include <api_mapedit.h>
+#include <include/x_api.h>
+#include <include/p_setup.h>
+#include <p_mapsetup.h>
 
 /**
  * Called during pre-init.

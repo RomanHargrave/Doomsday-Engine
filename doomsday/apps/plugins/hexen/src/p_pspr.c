@@ -19,17 +19,12 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
-#include "p_pspr.h"
 
 #include <math.h>
 #include "d_netcl.h"
 #include "g_common.h"
-#include "mobj.h"
 #include "p_inventory.h"
 #include "p_map.h"
-#include "player.h"
-#include "r_common.h"
 
 static int const WEAPONTOP          = 6;
 static int const WEAPONBOTTOM       = 128;

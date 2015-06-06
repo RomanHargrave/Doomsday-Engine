@@ -19,15 +19,13 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 
 #include <string.h>
 #include <math.h>
 #include "g_common.h"
-#include "mobj.h"
 #include "p_map.h"
 
-#define TELEPORT_LIFE           (1)
+static int const TELEPORT_LIFE = 1;
 
 static coord_t* orbitTableX = NULL;
 static coord_t* orbitTableY = NULL;
@@ -38,7 +36,7 @@ int localQuakeHappening[MAXPLAYERS];
 
 void X_CreateLUTs(void)
 {
-#define ORBITRES            256
+    static int const ORBITRES = 256;
 
     uint i;
 
@@ -54,7 +52,6 @@ void X_CreateLUTs(void)
     for(i = 0; i < FLOATBOBRES; ++i)
         FloatBobOffset[i] = sin(((coord_t) i) / 10.186f) * 8;
 
-#undef ORBITRES
 }
 
 void X_DestroyLUTs(void)

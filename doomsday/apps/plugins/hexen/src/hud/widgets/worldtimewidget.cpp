@@ -18,9 +18,8 @@
  * 02110-1301 USA</small>
  */
 
+#include <include/g_game.h>
 #include "hud/widgets/worldtimewidget.h"
-
-#include "jhexen.h"
 
 using namespace de;
 

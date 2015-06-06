@@ -23,26 +23,24 @@
 #  pragma optimize("g", off)
 #endif
 
-#include "jhexen.h"
+#include <include/info.h>
 #include "p_mobj.h"
 
 #include <math.h>
-#include <string.h>
 #include <de/binangle.h>
 #include "d_netcl.h"
 #include "dmu_lib.h"
 #include "g_common.h"
 #include "p_map.h"
-#include "player.h"
 
-#define MAX_BOB_OFFSET          8
+static int const MAX_BOB_OFFSET = 8;
 
-#define BLAST_RADIUS_DIST       255
-#define BLAST_SPEED             20
-#define BLAST_FULLSTRENGTH      255
-#define HEAL_RADIUS_DIST        255
+static int const BLAST_RADIUS_DIST = 255;
+static int const BLAST_SPEED = 20;
+static int const BLAST_FULLSTRENGTH = 255;
+static int const HEAL_RADIUS_DIST = 255;
 
-#define SMALLSPLASHCLIP         (12);
+static int const SMALLSPLASHCLIP = 12;
 
 void P_ExplodeMissile(mobj_t *mo)
 {

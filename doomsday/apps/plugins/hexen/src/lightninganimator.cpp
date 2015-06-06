@@ -19,17 +19,15 @@
  * 02110-1301 USA</small>
  */
 
-#include "jhexen.h"
 #include "lightninganimator.h"
 
-#include <QVector>
 #include "dmu_lib.h"
 #include "gamesession.h"
 
 using namespace de;
 
-#define LIGHTNING_SPECIAL       198
-#define LIGHTNING_SPECIAL2      199
+static int const LIGHTNING_SPECIAL = 198;
+static int const LIGHTNING_SPECIAL2 = 199;
 
 static bool isLightningSector(Sector *sec)
 {
