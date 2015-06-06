@@ -823,6 +823,20 @@ void ST_Start(int localPlayer)
     automap.setCameraRotationMode(CPP_BOOL(cfg.common.automapRotate));
 
     hud->stopped = false;
+
+    // Configure outgoing chat sound
+    {
+        ChatWidget* chatWidget = ST_TryFindChatWidget(localPlayer);
+
+        if(chatWidget)
+        {
+            chatWidget->setSentSound((gameModeBits & GM_ANY_DOOM2) ? SFX_RADIO : SFX_TINK);
+        }
+        else
+        {
+            LOGDEV_SCR_WARNING("Could not find a ChatWidget instance in order to configure outgoing sound");
+        }
+    }
 }
 
 void ST_Stop(int localPlayer)

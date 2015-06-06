@@ -46,18 +46,15 @@ DENG2_PIMPL(ChatWidget)
     bool active      = false;
     bool shiftDown   = false;
     dint destination = 0;      ///< Default: All players.
+    sfxenum_t sentSound = SFX_NONE;
 
     String text;
 
     Instance(Public *i) : Base(i) {}
 
-    static void playSentSound()
+    void playSentSound()
     {
-#if __JDOOM__
-        S_LocalSound((gameModeBits & GM_ANY_DOOM2)? SFX_RADIO : SFX_TINK, 0);
-#elif __JDOOM64__
-        S_LocalSound(SFX_RADIO, 0);
-#endif
+        S_LocalSound(sentSound, 0);
     }
 
     void sendMessage()
@@ -321,4 +318,9 @@ void ChatWidget::consoleRegister()
         Block const cvarname = (String("chat-macro%1").arg(i)).toUtf8();
         C_VAR_CHARPTR(cvarname.constData(), &cfg.common.chatMacros[i], 0, 0, 0);
     }
+}
+
+void ChatWidget::setSentSound(sfxenum_t sound)
+{
+    d->sentSound = sound;
 }

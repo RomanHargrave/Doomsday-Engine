@@ -145,6 +145,8 @@ public:
      */
     static void consoleRegister();
 
+    void setSentSound(sfxenum_t);
+
 private:
     DENG2_PRIVATE(d)
 };
