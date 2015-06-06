@@ -53,17 +53,7 @@ private:
 
 class AutomapStyle;
 
-/**
- * @defgroup automapWidgetFlags  Automap Widget Flags
- */
-///@{
-#define AWF_SHOW_THINGS             ( 0x01 )
-#define AWF_SHOW_KEYS               ( 0x02 )
-#define AWF_SHOW_ALLLINES           ( 0x04 )
-#define AWF_SHOW_SPECIALLINES       ( 0x08 )
-#define AWF_SHOW_VERTEXES           ( 0x10 )
-#define AWF_SHOW_LINE_NORMALS       ( 0x20 )
-///@}
+
 
 #define AUTOMAPWIDGET_OPEN_SECONDS  ( 0.3f )
 
@@ -76,6 +66,22 @@ class AutomapStyle;
 class AutomapWidget : public HudWidget
 {
 public:
+
+    // Flags
+    using AutomapFlag = unsigned char;
+
+    /**
+     * @defgroup automapWidgetFlags Automap widget flags
+     */
+    ///@{
+    static AutomapFlag const SHOW_THINGS        = 0x01;
+    static AutomapFlag const SHOW_KEYS          = 0x02;
+    static AutomapFlag const SHOW_ALL_LINES     = 0x04;
+    static AutomapFlag const SHOW_SPECIAL_LINES = 0x08;
+    static AutomapFlag const SHOW_VERTICES      = 0x10;
+    static AutomapFlag const SHOW_LINE_NORMALS  = 0x20;
+    ///@}
+
     /// Required/referenced point of interest is missing. @ingroup errors
     DENG2_ERROR(MissingPointError);
 

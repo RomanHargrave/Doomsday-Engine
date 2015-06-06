@@ -293,26 +293,26 @@ static void setAutomapCheatLevel(AutomapWidget& map, int level)
     hud->automapCheatLevel = level;
 
     dint flags = map.flags()
-        & ~ (AWF_SHOW_ALLLINES 
-            |AWF_SHOW_THINGS
-            |AWF_SHOW_SPECIALLINES
-            |AWF_SHOW_VERTEXES
-            |AWF_SHOW_LINE_NORMALS);
+        & ~ ( AutomapWidget::SHOW_ALL_LINES
+            | AutomapWidget::SHOW_THINGS
+            | AutomapWidget::SHOW_SPECIAL_LINES
+            | AutomapWidget::SHOW_VERTICES
+            | AutomapWidget::SHOW_LINE_NORMALS );
 
     if (hud->automapCheatLevel >= 1)
     {
-        flags |= AWF_SHOW_ALLLINES;
+        flags |= AutomapWidget::SHOW_ALL_LINES;
     }
 
     if (hud->automapCheatLevel == 2)
     {
-        flags |= AWF_SHOW_THINGS 
-              |  AWF_SHOW_SPECIALLINES;
+        flags |= AutomapWidget::SHOW_THINGS
+              |  AutomapWidget::SHOW_SPECIAL_LINES;
     }
     else if (hud->automapCheatLevel > 2)
     {
-        flags |= AWF_SHOW_VERTEXES 
-              |  AWF_SHOW_LINE_NORMALS;
+        flags |= AutomapWidget::SHOW_VERTICES
+              |  AutomapWidget::SHOW_VERTICES;
     }
 
     map.setFlags(flags);
@@ -348,10 +348,11 @@ static void initAutomapForCurrentMap(AutomapWidget& map)
     // Enable keyboard guide for "baby" mode
     if (G_Ruleset_Skill() == SM_BABY && cfg.common.automapBabyKeys)
     {
-        map.setFlags(map.flags() | AWF_SHOW_KEYS);
+        map.setFlags(map.flags() | AutomapWidget::SHOW_KEYS);
     }
 
     {
+        static AutomapWidget::AutomapFlag const SPECIAL_LINES = AutomapWidget::SHOW_SPECIAL_LINES;
         AutomapStyle* style = map.style();
         // Show player arrow in cheat/dev mode
         if (hud->automapCheatLevel > 0)
@@ -378,13 +379,13 @@ static void initAutomapForCurrentMap(AutomapWidget& map)
         style->newLineInfo(0, 136, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         style->newLineInfo(0, 137, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Exit switch.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES,  11, 0, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES,  11, 0, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Exit cross line.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES,  52, 2, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES,  52, 2, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Secret Exit switch.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES,  51, 0, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES,  51, 0, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Secret Exit cross line.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES, 124, 2, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES, 124, 2, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
     }
 
     // Focus camera on currently followed map object, if applicable

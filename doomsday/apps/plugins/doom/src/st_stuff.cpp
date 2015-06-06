@@ -695,13 +695,17 @@ static void setAutomapCheatLevel(AutomapWidget &automap, int level)
 
     hud->automapCheatLevel = level;
 
-    dint flags = automap.flags() & ~(AWF_SHOW_ALLLINES|AWF_SHOW_THINGS|AWF_SHOW_SPECIALLINES|AWF_SHOW_VERTEXES|AWF_SHOW_LINE_NORMALS);
+    dint flags = automap.flags() & ~(  AutomapWidget::SHOW_ALL_LINES     | AutomapWidget::SHOW_THINGS
+                                     | AutomapWidget::SHOW_SPECIAL_LINES | AutomapWidget::SHOW_VERTICES
+                                     | AutomapWidget::SHOW_LINE_NORMALS );
+
     if(hud->automapCheatLevel >= 1)
-        flags |= AWF_SHOW_ALLLINES;
+        flags |= AutomapWidget::SHOW_ALL_LINES;
     if(hud->automapCheatLevel == 2)
-        flags |= AWF_SHOW_THINGS | AWF_SHOW_SPECIALLINES;
+        flags |= AutomapWidget::SHOW_THINGS | AutomapWidget::SHOW_SPECIAL_LINES;
     if(hud->automapCheatLevel > 2)
-        flags |= (AWF_SHOW_VERTEXES | AWF_SHOW_LINE_NORMALS);
+        flags |= AutomapWidget::SHOW_VERTICES | AutomapWidget::SHOW_LINE_NORMALS;
+
     automap.setFlags(flags);
 }
 
@@ -720,6 +724,8 @@ static void initAutomapForCurrentMap(AutomapWidget &automap)
 
     // Configure automap lines specific to Doom
     {
+        static AutomapWidget::AutomapFlag const SPECIAL_LINES = AutomapWidget::SHOW_SPECIAL_LINES;
+
         // Blue locked door, open.
         style->newLineInfo(0,  32, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Blue lockestyle styleoor, lockestyle.
@@ -739,13 +745,13 @@ static void initAutomapForCurrentMap(AutomapWidget &automap)
         style->newLineInfo(0, 136, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         style->newLineInfo(0, 137, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Exit switch.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES,  11, 0, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES,  11, 0, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Exit cross line.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES,  52, 2, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES,  52, 2, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Secret Exit switch.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES,  51, 0, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES,  51, 0, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
         // Secret Exit cross line.
-        style->newLineInfo(AWF_SHOW_SPECIALLINES, 124, 2, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(SPECIAL_LINES, 124, 2, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
     }
 
     // Determine the obj view scale factors.
@@ -754,17 +760,13 @@ static void initAutomapForCurrentMap(AutomapWidget &automap)
 
     automap.clearAllPoints(true/*silent*/);
 
-#if !__JHEXEN__
     if(G_Ruleset_Skill() == SM_BABY && cfg.common.automapBabyKeys)
     {
-        automap.setFlags(automap.flags() | AWF_SHOW_KEYS);
+        automap.setFlags(automap.flags() | AutomapWidget::SHOW_KEYS);
     }
-#endif
 
-#if __JDOOM__
     if(!IS_NETGAME && hud->automapCheatLevel)
         style->setObjectSvg(AMO_THINGPLAYER, VG_CHEATARROW);
-#endif
 
     // Are we re-centering on a followed mobj?
     if(mobj_t *mob = automap.followMobj())

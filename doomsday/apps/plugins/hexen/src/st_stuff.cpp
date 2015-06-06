@@ -568,13 +568,28 @@ static void setAutomapCheatLevel(AutomapWidget &automap, int level)
     hudstate_t *hud = &hudStates[automap.player()];
     hud->automapCheatLevel = level;
 
-    int flags = automap.flags() & ~(AWF_SHOW_ALLLINES|AWF_SHOW_THINGS|AWF_SHOW_SPECIALLINES|AWF_SHOW_VERTEXES|AWF_SHOW_LINE_NORMALS);
+    int flags = automap.flags() & ~(  AutomapWidget::SHOW_ALL_LINES
+                                    | AutomapWidget::SHOW_THINGS
+                                    | AutomapWidget::SHOW_SPECIAL_LINES
+                                    | AutomapWidget::SHOW_VERTICES
+                                    | AutomapWidget::SHOW_LINE_NORMALS );
     if(hud->automapCheatLevel >= 1)
-        flags |= AWF_SHOW_ALLLINES;
+    {
+        flags |= AutomapWidget::SHOW_ALL_LINES;
+    }
+
     if(hud->automapCheatLevel == 2)
-        flags |= AWF_SHOW_THINGS | AWF_SHOW_SPECIALLINES;
+    {
+        flags |= AutomapWidget::SHOW_THINGS
+              |  AutomapWidget::SHOW_SPECIAL_LINES;
+    }
+
     if(hud->automapCheatLevel > 2)
-        flags |= (AWF_SHOW_VERTEXES | AWF_SHOW_LINE_NORMALS);
+    {
+        flags |= AutomapWidget::SHOW_VERTICES
+              |  AutomapWidget::SHOW_LINE_NORMALS;
+    }
+
     automap.setFlags(flags);
 }
 

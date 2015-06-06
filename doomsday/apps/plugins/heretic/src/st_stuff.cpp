@@ -690,13 +690,20 @@ static void setAutomapCheatLevel(AutomapWidget &automap, int level)
 
     hud->automapCheatLevel = level;
 
-    dint flags = automap.flags() & ~(AWF_SHOW_ALLLINES|AWF_SHOW_THINGS|AWF_SHOW_SPECIALLINES|AWF_SHOW_VERTEXES|AWF_SHOW_LINE_NORMALS);
+    dint flags = automap.flags() & ~(  AutomapWidget::SHOW_ALL_LINES
+                                     | AutomapWidget::SHOW_THINGS
+                                     | AutomapWidget::SHOW_SPECIAL_LINES
+                                     | AutomapWidget::SHOW_VERTICES
+                                     | AutomapWidget::SHOW_LINE_NORMALS );
+
     if(hud->automapCheatLevel >= 1)
-        flags |= AWF_SHOW_ALLLINES;
+        flags |= AutomapWidget::SHOW_ALL_LINES;
     if(hud->automapCheatLevel == 2)
-        flags |= AWF_SHOW_THINGS | AWF_SHOW_SPECIALLINES;
+        flags |= AutomapWidget::SHOW_THINGS
+              |  AutomapWidget::SHOW_SPECIAL_LINES;
     if(hud->automapCheatLevel > 2)
-        flags |= (AWF_SHOW_VERTEXES | AWF_SHOW_LINE_NORMALS);
+        flags |= AutomapWidget::SHOW_VERTICES
+              |  AutomapWidget::SHOW_LINE_NORMALS;
     automap.setFlags(flags);
 }
 
@@ -713,27 +720,16 @@ static void initAutomapForCurrentMap(AutomapWidget &automap)
                          *((coord_t *) DD_GetVariable(DD_MAP_MIN_Y)),
                          *((coord_t *) DD_GetVariable(DD_MAP_MAX_Y)));
 
-#if __JDOOM__
-    automapcfg_t *style = automap.style();
-#endif
-
     // Determine the obj view scale factors.
     if(automap.cameraZoomMode())
         automap.setScale(0);
 
     automap.clearAllPoints(true/*silent*/);
 
-#if !__JHEXEN__
     if(G_Ruleset_Skill() == SM_BABY && cfg.common.automapBabyKeys)
     {
-        automap.setFlags(automap.flags() | AWF_SHOW_KEYS);
+        automap.setFlags(automap.flags() | AutomapWidget::SHOW_KEYS);
     }
-#endif
-
-#if __JDOOM__
-    if(!IS_NETGAME && hud->automapCheatLevel)
-        AM_SetVectorGraphic(style, AMO_THINGPLAYER, VG_CHEATARROW);
-#endif
 
     // Are we re-centering on a followed mobj?
     if(mobj_t *mob = automap.followMobj())

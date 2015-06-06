@@ -216,7 +216,7 @@ DENG2_PIMPL(AutomapWidget)
     DGLuint lists[NUM_MAP_OBJECTLISTS];  ///< Each list contains one or more of given type of automap wi.
     bool needBuildLists = false;         ///< @c true= force a rebuild of all lists.
 
-    dint flags = 0;
+    AutomapWidget::AutomapFlag flags = 0;
     bool open     = false;       ///< @c true= currently active.
     bool revealed = false;
     bool follow   = true;        ///< @c true= camera position tracks followed player.
@@ -589,7 +589,7 @@ DENG2_PIMPL(AutomapWidget)
             return;
 
         // Is this line being drawn?
-        if((xline->flags & ML_DONTDRAW) && !(flags & AWF_SHOW_ALLLINES))
+        if((xline->flags & ML_DONTDRAW) && !(flags & SHOW_ALL_LINES))
             return;
 
         // We only want to draw twosided lines once.
@@ -600,7 +600,7 @@ DENG2_PIMPL(AutomapWidget)
         }
 
         automapcfg_lineinfo_t const *info = nullptr;
-        if((flags & AWF_SHOW_ALLLINES) || xline->mapped[rs.plr - players])
+        if((flags & SHOW_ALL_LINES) || xline->mapped[rs.plr - players])
         {
             auto *backSector = (Sector *)P_GetPtrp(line, DMU_BACK_SECTOR);
 
@@ -632,7 +632,7 @@ DENG2_PIMPL(AutomapWidget)
                         // Ceiling level change.
                         info = style->tryFindLineInfo(AMO_CEILINGCHANGELINE);
                     }
-                    else if(flags & AWF_SHOW_ALLLINES)
+                    else if(flags & SHOW_ALL_LINES)
                     {
                         info = style->tryFindLineInfo(AMO_UNSEENLINE);
                     }
@@ -659,7 +659,7 @@ DENG2_PIMPL(AutomapWidget)
                       info->glowSize, !rs.addToLists, info->scaleWithView,
                       (info->glow && !(xline->special && !cfg.common.automapShowDoors)),
                       (xline->special && !cfg.common.automapShowDoors ? BM_NORMAL : info->blendMode),
-                      (flags & AWF_SHOW_LINE_NORMALS),
+                      (flags & SHOW_LINE_NORMALS),
                       rs.addToLists);
 
             xline->validCount = VALIDCOUNT; // Mark as drawn this frame.
@@ -776,13 +776,13 @@ DENG2_PIMPL(AutomapWidget)
         // Already processed this frame?
         if(xline->validCount == VALIDCOUNT) return false;
 
-        if((xline->flags & ML_DONTDRAW) && !(inst->flags & AWF_SHOW_ALLLINES))
+        if((xline->flags & ML_DONTDRAW) && !(inst->flags & SHOW_ALL_LINES))
         {
             return false;
         }
 
         automapcfg_objectname_t amo = AMO_NONE;
-        if((inst->flags & AWF_SHOW_ALLLINES) || xline->mapped[rs.plr - players])
+        if((inst->flags & SHOW_ALL_LINES) || xline->mapped[rs.plr - players])
         {
             amo = AMO_SINGLESIDEDLINE;
         }
@@ -798,7 +798,7 @@ DENG2_PIMPL(AutomapWidget)
         if(automapcfg_lineinfo_t const *info = inst->style->tryFindLineInfo(amo))
         {
             drawLine(line, Vector3f(info->rgba), info->rgba[3] * cfg.common.automapLineAlpha * opacity,
-                     info->blendMode, (inst->flags & AWF_SHOW_LINE_NORMALS));
+                     info->blendMode, (inst->flags & SHOW_LINE_NORMALS));
         }
 
         xline->validCount = VALIDCOUNT;  // Mark as processed this frame.
@@ -830,7 +830,7 @@ DENG2_PIMPL(AutomapWidget)
 
         if(xline->validCount == VALIDCOUNT) return false;
 
-        if(!(inst->flags & AWF_SHOW_ALLLINES))
+        if(!(inst->flags & SHOW_ALL_LINES))
         {
             if(xline->flags & ML_DONTDRAW) return false;
         }
@@ -841,17 +841,18 @@ DENG2_PIMPL(AutomapWidget)
         // XG lines blink.
         if(!(mapTime & 4)) return false;
 
-        drawLine(line, Vector3f(.8f, 0, .8f), 1, BM_ADD, (inst->flags & AWF_SHOW_LINE_NORMALS));
+        drawLine(line, Vector3f(.8f, 0, .8f), 1, BM_ADD, (inst->flags & SHOW_LINE_NORMALS));
         xline->validCount = VALIDCOUNT;  // Mark as processed this frame.
 
         return false;  // Continue iteration.
     }
 #endif
 
+    // TODO no preprocessor nonsense common source!
     void drawAllLines_xg() const
     {
 #if __JDOOM__ || __JHERETIC__ || __JDOOM64__
-        if(!(flags & AWF_SHOW_SPECIALLINES))
+        if(!(flags & SHOW_SPECIAL_LINES))
             return;
 
         // VALIDCOUNT is used to track which lines have been drawn this frame.
@@ -933,7 +934,7 @@ DENG2_PIMPL(AutomapWidget)
 
             dfloat angle = 0;
             dfloat keyColorRGB[3];
-            if(p->flags & AWF_SHOW_KEYS)
+            if(p->flags & SHOW_KEYS)
             {
                 dint keyColor = thingColorForMobjType(mobjtype_t(mob->type));
                 if(keyColor != -1)
@@ -948,7 +949,7 @@ DENG2_PIMPL(AutomapWidget)
             // Something else?
             if(!isVisible)
             {
-                isVisible = !!(p->flags & AWF_SHOW_THINGS);
+                isVisible = !!(p->flags & SHOW_THINGS);
                 angle = Mobj_AngleSmoothed(mob) / (float) ANGLE_MAX * 360;  // In degrees.
             }
 
@@ -967,7 +968,7 @@ DENG2_PIMPL(AutomapWidget)
 
     void drawAllThings() const
     {
-        if(!(flags & (AWF_SHOW_THINGS | AWF_SHOW_KEYS)))
+        if(!(flags & (SHOW_THINGS | SHOW_KEYS)))
             return;
 
         dfloat const alpha = uiRendState->pageAlpha;
@@ -1187,7 +1188,7 @@ DENG2_PIMPL(AutomapWidget)
 
     void drawAllVertexes()
     {
-        if(!(flags & AWF_SHOW_VERTEXES))
+        if(!(flags & SHOW_VERTICES))
             return;
 
         DGL_Color4f(.2f, .5f, 1, uiRendState->pageAlpha);
