@@ -53,10 +53,6 @@ private:
 
 class AutomapStyle;
 
-
-
-#define AUTOMAPWIDGET_OPEN_SECONDS  ( 0.3f )
-
 /**
  * Specialized HudWidget displaying a simplified, 2D interpretation of the current
  * world map (much like a satellite navigation system).

@@ -322,7 +322,7 @@ void D_PreInit()
     cfg.common.automapZoomSpeed = .1f;
     cfg.common.automapPanSpeed = .5f;
     cfg.common.automapPanResetOnOpen = true;
-    cfg.common.automapOpenSeconds = AUTOMAPWIDGET_OPEN_SECONDS;
+    cfg.common.automapOpenSeconds = 0.3F;
 
     cfg.common.hudCheatCounterScale = .7f;
     cfg.common.hudCheatCounterShowWithAutomap = true;
