@@ -28,20 +28,12 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <cstring>
-
-#include "jdoom.h"
 
 #include "dmu_lib.h"
 #include "d_net.h"
 #include "d_netsv.h"
 #include "hu_stuff.h"
-#include "hu_lib.h"
 #include "hud/automapstyle.h"
-#include "p_mapsetup.h"
-#include "p_tick.h"
-#include "player.h"
-#include "p_user.h"
 #include "r_common.h"
 
 #include "hud/widgets/armorwidget.h"
@@ -135,14 +127,12 @@ static patchid_t pFaceBackground[NUMTEAMS];
 
 void SBarBackground_Drawer(HudWidget *wi, Point2Raw const *offset)
 {
-#define WIDTH           ( ST_WIDTH)
-#define HEIGHT          ( ST_HEIGHT)
-#define X_OFFSET        ( 104 )
-#define Y_OFFSET        (   1 )
-#define ORIGINX         ( int(-WIDTH / 2) )
-#define ORIGINY         ( int(-HEIGHT * ST_StatusBarShown(wi->player())) )
-
-#define FACE_X_OFFSET   ( 144 )
+    static int const WIDTH = ST_WIDTH;
+    static int const HEIGHT = ST_HEIGHT;
+    static int const X_OFFSET = 104;
+    static int const FACE_X_OFFSET = 144;
+    static int const ORIGINX = -WIDTH / 2;
+    /*  */ int const ORIGINY = int(-HEIGHT * ST_StatusBarShown(wi->player()));
 
     float x = ORIGINX, y  = ORIGINY, w = WIDTH, h = HEIGHT;
 
@@ -356,13 +346,6 @@ void SBarBackground_Drawer(HudWidget *wi, Point2Raw const *offset)
     DGL_MatrixMode(DGL_MODELVIEW);
     DGL_PopMatrix();
 
-#undef FACE_X_OFFSET
-#undef ORIGINY
-#undef ORIGINX
-#undef Y_OFFSET
-#undef X_OFFSET
-#undef HEIGHT
-#undef WIDTH
 }
 
 void SBarBackground_UpdateGeometry(HudWidget *wi)

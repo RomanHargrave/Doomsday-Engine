@@ -19,24 +19,17 @@
  * 02110-1301 USA</small>
  */
 
-#include "m_cheat.h"
-
 #include <de/Log>
-#include <de/Range>
-#include <de/String>
 #include <de/Vector>
 
-#include "jdoom.h"
 #include "d_net.h"
 #include "d_netcl.h"
 #include "d_netsv.h"
 #include "dmu_lib.h"
 #include "g_eventsequence.h"
-#include "g_defs.h"
 #include "gamesession.h"
 #include "hu_msg.h"
 #include "p_user.h"
-#include "player.h"
 
 using namespace de;
 

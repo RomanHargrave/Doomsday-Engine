@@ -18,10 +18,8 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom.h"
 
 #include "hu_menu.h"
-#include "hu_stuff.h"
 
 using namespace de;
 using namespace common;

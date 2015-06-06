@@ -36,21 +36,20 @@
 
 // HEADER FILES ------------------------------------------------------------
 
-#include "jdoom.h"
 #include "p_pspr.h"
 
 #include <math.h>
 #include "d_net.h"
 #include "d_netcl.h"
-#include "player.h"
 #include "p_map.h"
 #include "p_tick.h"
 
 // MACROS ------------------------------------------------------------------
 
-#define LOWERSPEED              (6)
-#define RAISESPEED              (6)
-#define WEAPONTOP               (32)
+static int const WEAPONTOP    = 32;
+static int const WEAPONBOTTOM = 128;
+static int const RAISESPEED   = 6;
+static int const LOWERSPEED   = 6;
 
 // TYPES -------------------------------------------------------------------
 

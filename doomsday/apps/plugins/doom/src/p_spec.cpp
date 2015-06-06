@@ -19,24 +19,17 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom.h"
 #include "p_spec.h"
 
 #include "gamesession.h"
-#include "d_net.h"
 #include "d_netsv.h"
 #include "dmu_lib.h"
-#include "m_argv.h"
 #include "p_ceiling.h"
 #include "p_door.h"
 #include "p_floor.h"
-#include "p_mapsetup.h"
-#include "p_mapspec.h"
 #include "p_plat.h"
-#include "p_scroll.h"
 #include "p_switch.h"
 #include "p_tick.h"
-#include "player.h"
 
 static void crossSpecialLine(Line *line, int side, mobj_t *thing);
 static void shootSpecialLine(mobj_t *thing, Line *line);

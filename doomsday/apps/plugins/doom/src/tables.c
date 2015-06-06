@@ -41,8 +41,6 @@
  *   maps tan(angle) to angle fast. Gotta search.
  */
 
-#include "jdoom.h"
-
 #include "tables.h"
 
 // finecosine and finesine use the same array of values.

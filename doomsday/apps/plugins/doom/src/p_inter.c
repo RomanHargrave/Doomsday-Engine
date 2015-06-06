@@ -31,17 +31,12 @@
 #  pragma optimize("g", off)
 #endif
 
-#include "jdoom.h"
 #include "p_inter.h"
 
-#include "d_net.h"
 #include "d_netsv.h"
-#include "dmu_lib.h"
-#include "player.h"
 #include "p_user.h"
-#include "p_mapsetup.h"
 
-#define BONUSADD            (6)
+static int const BONUSADD = 6;
 
 // Number of rounds per clip for each ammo type.
 int clipAmmo[NUM_AMMO_TYPES] = {10, 4, 20, 1};

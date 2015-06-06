@@ -27,20 +27,14 @@
 
 #include <math.h>
 
-#include "jdoom.h"
-
 #include "hu_stuff.h"
 #include "g_common.h"
 #include "p_map.h"
-#include "p_terraintype.h"
-#include "player.h"
 #include "p_tick.h"
-#include "p_local.h"
 #include "dmu_lib.h"
 
-#define VANISHTICS              (2*TICSPERSEC)
-
-#define MAX_BOB_OFFSET          (8)
+static int const VANISHTICS = 2 * TICSPERSEC;
+static int const MAX_BOB_OFFSET = 8;
 
 void P_ExplodeMissile(mobj_t *mo)
 {

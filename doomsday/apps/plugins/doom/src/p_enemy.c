@@ -29,22 +29,18 @@
 #  pragma optimize("g", off)
 #endif
 
-#include "jdoom.h"
-
 #include "dmu_lib.h"
 #include "p_map.h"
 #include "p_mapspec.h"
 #include "p_door.h"
 #include "p_floor.h"
-#include "p_saveg.h"
 #include "p_tick.h"
 
-#define FATSPREAD               (ANG90/8)
-#define SKULLSPEED              (20)
-#define TRACEANGLE              (0xc000000)
+static float const FATSPREAD = ANG90 / 8;
+static int const SKULLSPEED = 20;
+static int const TRACEANGLE = 0xC000000;
 
-// Eight directional movement speeds.
-#define MOVESPEED_DIAGONAL      (0.71716309)
+static float const MOVESPEED_DIAGONAL = 0.71716309F;
 
 static coord_t const dirSpeed[8][2] =
 {
@@ -57,7 +53,6 @@ static coord_t const dirSpeed[8][2] =
     {0, -1},
     {MOVESPEED_DIAGONAL, -MOVESPEED_DIAGONAL}
 };
-#undef MOVESPEED_DIAGONAL
 
 /**
  * If a monster yells at a player, it will alert other monsters to the

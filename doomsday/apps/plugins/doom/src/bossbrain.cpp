@@ -21,7 +21,6 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom.h"
 #include "bossbrain.h"
 #include "gamesession.h"
 #include "p_saveg.h"

@@ -28,8 +28,6 @@
 
 // HEADER FILES ------------------------------------------------------------
 
-#include "jdoom.h"
-
 #include "g_defs.h"
 #include "player.h"
 

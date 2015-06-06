@@ -21,12 +21,9 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom.h"
 #include "p_lights.h"
 
 #include "dmu_lib.h"
-#include "p_mapsetup.h"
-#include "p_mapspec.h"
 
 void T_FireFlicker(void *flickPtr)
 {

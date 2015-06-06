@@ -29,7 +29,7 @@
 
 // HEADER FILES ------------------------------------------------------------
 
-#include "jdoom.h"
+#include <include/acfnlink.h>
 
 // MACROS ------------------------------------------------------------------
 
@@ -44,6 +44,7 @@
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
+
 
 actionlink_t actionlinks[] = {
     {"A_BabyMetal",         A_BabyMetal},

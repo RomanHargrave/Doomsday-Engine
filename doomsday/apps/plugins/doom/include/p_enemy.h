@@ -24,8 +24,6 @@
 #  error "Using jDoom headers without __JDOOM__"
 #endif
 
-#include "jdoom.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif

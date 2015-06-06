@@ -24,11 +24,12 @@
 #ifndef LIBDOOM_PLAY_BOSSBRAIN_H
 #define LIBDOOM_PLAY_BOSSBRAIN_H
 
+#include <de/libcore.h>
+#include <de/liblegacy.h>
+
 #ifndef __JDOOM__
 #  error "Using jDoom headers without __JDOOM__"
 #endif
-
-#include "jdoom.h"
 
 #ifdef __cplusplus
 class MapStateReader;

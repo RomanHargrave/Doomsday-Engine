@@ -18,7 +18,11 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom.h"
+
+#include <api_mapedit.h>
+#include <include/d_api.h>
+#include <include/p_setup.h>
+#include <p_mapsetup.h>
 
 /**
  * Called during pre-init.
@@ -68,6 +72,10 @@ void P_RegisterMapObjs(void)
 int P_HandleMapDataPropertyValue(uint id, int dtype, int prop,
                                  valuetype_t type, void *data)
 {
+    DENG2_UNUSED(id);
+    DENG2_UNUSED(type);
+    DENG2_UNUSED(data);
+
     switch(dtype)
     {
     case DMU_SURFACE:
@@ -108,6 +116,8 @@ int P_HandleMapDataPropertyValue(uint id, int dtype, int prop,
  */
 int P_HandleMapObjectStatusReport(int code, uint id, int dtype, void *data)
 {
+    DENG2_UNUSED(dtype);
+
     switch(code)
     {
     case DMUSC_LINE_FIRSTRENDERED:
