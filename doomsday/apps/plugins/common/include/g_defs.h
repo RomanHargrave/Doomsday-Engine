@@ -21,9 +21,12 @@
 #ifndef LIBCOMMON_DEFINITION_UTILS_H
 #define LIBCOMMON_DEFINITION_UTILS_H
 
+#include <include/info.h>
+
 #ifdef __cplusplus
 #include <doomsday/defs/ded.h>
 #include <doomsday/uri.h>
+
 
 /**
  * Provides access to the engine's definition database (DED).
@@ -64,9 +67,9 @@ extern "C" {
 /**
  * @return  The default for a value (retrieved from Doomsday).
  */
-int GetDefInt(char const *def, int *returnVal);
+int GetDefInt(char const *def, int* returnVal);
 
-void GetDefState(char const *def, int *returnVal);
+void GetDefState(char const *def, statenum_t* returnVal);
 
 #ifdef __cplusplus
 } // extern "C"

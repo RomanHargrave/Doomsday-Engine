@@ -203,16 +203,15 @@ void P_InitWeaponInfo(void)
 
             if(stricmp(data, "noammo"))
             {
-                ammotype_t          k;
 
-                for(k = 0; k < NUM_AMMO_TYPES; ++k)
+                for(int ammoTypeNum = 0; ammoTypeNum < NUM_AMMO_TYPES; ++ammoTypeNum)
                 {
-                    if(!stricmp(data, ammoTypeNames[k]))
+                    if(!stricmp(data, ammoTypeNames[ammoTypeNum]))
                     {
-                        weaponInfo[i][pclass].mode[0].ammoType[k] = true;
+                        weaponInfo[i][pclass].mode[0].ammoType[ammoTypeNum] = true;
 
                         sprintf(buf, WPINF "%i|Per shot", i);
-                        GetDefInt(buf, &weaponInfo[i][pclass].mode[0].perShot[k]);
+                        GetDefInt(buf, &weaponInfo[i][pclass].mode[0].perShot[ammoTypeNum]);
                         break;
                     }
                 }
