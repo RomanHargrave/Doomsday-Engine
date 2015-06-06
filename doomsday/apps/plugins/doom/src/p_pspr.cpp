@@ -36,6 +36,8 @@
 
 // HEADER FILES ------------------------------------------------------------
 
+#include <de/libcore.h>
+
 #include "p_pspr.h"
 
 #include <math.h>
@@ -85,7 +87,7 @@ void R_GetWeaponBob(int player, float* x, float* y)
     }
 }
 
-void P_SetPsprite(player_t* player, int position, statenum_t stnum)
+void P_SetPsprite(player_t* player, int position, uint32_t stnum)
 {
     pspdef_t           *psp;
     state_t            *state;
@@ -113,9 +115,16 @@ void P_SetPsprite(player_t* player, int position, statenum_t stnum)
         // Call the state action routine (modified handling).
         if(state->action)
         {
-            state->action(player, psp);
+            {
+                // TODO a less 'C' way to do this
+                auto actionFunc = de::function_cast<void (*)(player_t*, pspdef_t*)>(state->action);
+                actionFunc(player, psp);
+            }
+
             if(!psp->state)
+            {
                 break;
+            }
         }
 
         stnum = psp->state->nextState;
@@ -162,7 +171,7 @@ void P_BringUpWeapon(player_t* player)
     if(wminfo->raiseSound)
         S_StartSoundEx(wminfo->raiseSound, player->plr->mo);
 
-    P_SetPsprite(player, ps_weapon, wminfo->states[WSN_UP]);
+    P_SetPsprite(player, ps_weapon, int(wminfo->states[WSN_UP]));
 }
 
 void P_FireWeapon(player_t *player)
@@ -351,8 +360,7 @@ void C_DECL A_Raise(player_t *player, pspdef_t *psp)
     psp->pos[VY] = WEAPONTOP;
 
     // The weapon has been raised all the way, so change to the ready state.
-    newstate =
-        weaponInfo[player->readyWeapon][player->class_].mode[0].states[WSN_READY];
+    newstate = weaponInfo[player->readyWeapon][player->class_].mode[0].states[WSN_READY];
 
     P_SetPsprite(player, ps_weapon, newstate);
 }
