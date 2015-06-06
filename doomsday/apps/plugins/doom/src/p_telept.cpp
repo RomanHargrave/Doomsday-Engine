@@ -69,7 +69,7 @@ static mobj_t *getTeleportDestination(short tag)
 
         IterList_SetIteratorDirection(list, ITERLIST_FORWARD);
         IterList_RewindIterator(list);
-        while((sec = IterList_MoveIterator(list)) != NULL)
+        while((sec = (Sector*) IterList_MoveIterator(list)) != NULL)
         {
             params.sec = sec;
 
