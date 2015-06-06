@@ -27,21 +27,7 @@
  * m_random.c: Random number LUT.
  */
 
-// HEADER FILES ------------------------------------------------------------
-
-#include "jheretic.h"
-
-// TYPES -------------------------------------------------------------------
-
-// EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
-
-// PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
-
-// PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
-
-// EXTERNAL DATA DECLARATIONS ----------------------------------------------
-
-// PUBLIC DATA DEFINITIONS -------------------------------------------------
+#include <de/types.h>
 
 static int rndIndex = 0;
 static int prndIndex = 0;

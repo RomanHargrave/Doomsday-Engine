@@ -18,7 +18,11 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
+
+#include <api_mapedit.h>
+#include <include/h_api.h>
+#include <include/p_setup.h>
+#include <p_mapsetup.h>
 
 /**
  * Called during pre-init.

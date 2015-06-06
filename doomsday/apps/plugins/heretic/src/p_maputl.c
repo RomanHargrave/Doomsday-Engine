@@ -22,8 +22,11 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <include/p_mobj.h>
+#include <include/h_api.h>
+#include <include/tables.h>
+#include <include/h_config.h>
 
-#include "jheretic.h"
 #include "dmu_lib.h"
 
 /**
@@ -123,7 +126,7 @@ void P_ApplyTorque(mobj_t *mo)
     if(!cfg.slidingCorpses)
         return;
 
-    VALIDCOUNT++;
+    ++VALIDCOUNT;
     Mobj_TouchedLinesIterator(mo, PIT_ApplyTorque, mo);
 
     // If any momentum, mark object as 'falling' using engine-internal flags

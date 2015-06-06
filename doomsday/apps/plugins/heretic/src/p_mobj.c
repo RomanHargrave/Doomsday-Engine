@@ -22,24 +22,13 @@
 #include <math.h>
 #include <string.h>
 
-#include "jheretic.h"
-
 #include "d_netcl.h"
 #include "dmu_lib.h"
-#include "hu_stuff.h"
-#include "g_common.h"
 #include "p_map.h"
-#include "p_terraintype.h"
-#include "player.h"
 #include "p_tick.h"
 
-#include <assert.h>
-
-#define VANISHTICS              (2*TICSPERSEC)
-
-#define MAX_BOB_OFFSET          (8)
-
-#define NOMOMENTUM_THRESHOLD    (0.000001)
+static int const VANISHTICS = 2 * TICSPERSEC;
+static int const MAX_BOB_OFFSET = 8;
 
 mobj_t *missileMobj;
 

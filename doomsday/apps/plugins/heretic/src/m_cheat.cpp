@@ -19,7 +19,6 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
 #include "m_cheat.h"
 
 #include <cerrno>
@@ -32,8 +31,6 @@
 #include "g_eventsequence.h"
 #include "gamesession.h"
 #include "p_inventory.h"
-#include "p_user.h"
-#include "player.h"
 
 typedef eventsequencehandler_t cheatfunc_t;
 

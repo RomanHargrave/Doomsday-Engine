@@ -21,13 +21,9 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
-
 #include "dmu_lib.h"
 #include "mapstatereader.h"
 #include "mapstatewriter.h"
-#include "p_mapsetup.h"
-#include "p_mapspec.h"
 
 /**
  * Broken light flashing.

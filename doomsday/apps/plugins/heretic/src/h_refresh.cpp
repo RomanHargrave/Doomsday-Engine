@@ -18,23 +18,12 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
 #include "h_refresh.h"
 
-#include <cstring>
 #include "dmu_lib.h"
-#include "d_net.h"
 #include "g_common.h"
-#include "g_controls.h"
 #include "gamesession.h"
-#include "hu_menu.h"
-#include "hu_msg.h"
 #include "hu_pspr.h"
-#include "hu_stuff.h"
-#include "r_common.h"
-#include "p_mapsetup.h"
-#include "p_tick.h"
-#include "x_hair.h"
 
 float quitDarkenOpacity = 0;
 

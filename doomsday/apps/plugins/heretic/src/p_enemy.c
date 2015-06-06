@@ -30,21 +30,16 @@
 #  pragma optimize("g", off)
 #endif
 
-#include "jheretic.h"
-
 #include "dmu_lib.h"
 #include "p_map.h"
 #include "p_mapspec.h"
 #include "p_floor.h"
 
-#define MONS_LOOK_RANGE     (20*64)
-#define MONS_LOOK_LIMIT     64
-
-#define MNTR_CHARGE_SPEED   (13)
-
-#define MAX_GEN_PODS        16
-
-#define BODYQUESIZE         32
+static int const MONS_LOOK_RANGE = 20 * 64;
+static int const MONS_LOOK_LIMIT = 64;
+static int const MNTR_CHARGE_SPEED = 13;
+static int const MAX_GEN_PODS = 16;
+static int const BODYQUESIZE = 32;
 
 // Eight directional movement speeds.
 #define MOVESPEED_DIAGONAL      (0.71716309f)

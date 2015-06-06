@@ -18,16 +18,12 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
 #include "intermission.h"
 
-#include <cstring>
 #include "d_net.h"
 #include "d_netcl.h"
 #include "d_netsv.h"
 #include "gamesession.h"
-#include "hu_stuff.h"
-#include "p_mapsetup.h"
 #include "p_tick.h"
 
 using namespace de;

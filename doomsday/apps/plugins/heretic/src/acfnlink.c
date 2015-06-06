@@ -28,7 +28,7 @@
 
 // HEADER FILES ------------------------------------------------------------
 
-#include "jheretic.h"
+#include <include/acfnlink.h>
 
 // MACROS ------------------------------------------------------------------
 
@@ -43,6 +43,7 @@
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
+
 
 actionlink_t actionlinks[] = {
     {"A_AccTeleGlitter",    A_AccTeleGlitter},

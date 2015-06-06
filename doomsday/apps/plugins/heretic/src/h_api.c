@@ -31,15 +31,8 @@
 
 #include "doomsday.h"
 
-#include "jheretic.h"
-
 #include "d_netsv.h"
-#include "d_net.h"
-#include "fi_lib.h"
-#include "g_common.h"
 #include "g_update.h"
-#include "hu_menu.h"
-#include "p_mapsetup.h"
 #include "r_common.h"
 #include "p_map.h"
 #include "polyobjs.h"

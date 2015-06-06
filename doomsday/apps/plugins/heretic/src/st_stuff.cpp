@@ -25,24 +25,12 @@
 #  pragma warning(disable : 4748)
 #endif
 
-#include "jheretic.h"
 #include "st_stuff.h"
 
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-
-#include "d_net.h"
 #include "d_netsv.h"
 #include "dmu_lib.h"
-#include "hu_lib.h"
-#include "hu_stuff.h"
 #include "hu_inventory.h"
 #include "hud/automapstyle.h"
-#include "p_inventory.h"
-#include "p_mapsetup.h"
-#include "p_tick.h" // for Pause_IsPaused
-#include "player.h"
 #include "r_common.h"
 
 #include "hud/widgets/armorwidget.h"

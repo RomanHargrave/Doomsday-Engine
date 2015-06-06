@@ -19,30 +19,22 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
 #include "hereticv13mapstatereader.h"
 
-#include <cstdio>
-#include <cstring>
-#include <de/ArrayValue>
 #include <de/NativePath>
-#include <de/NumberValue>
+#include <include/doomdef.h>
 #include "dmu_lib.h"
 #include "hu_inventory.h"
 #include "p_ceiling.h"
 #include "p_door.h"
 #include "p_floor.h"
 #include "p_inventory.h"
-#include "p_map.h"
-#include "p_mapsetup.h"
 #include "p_plat.h"
-#include "p_saveio.h"
 #include "p_saveg.h"
-#include "p_tick.h"
 #include "r_common.h"       // R_UpdateConsoleView
 
-#define SIZEOF_V13_THINKER_T            12
-#define V13_THINKER_T_FUNC_OFFSET       8
+static int const SIZEOF_V13_THINKER_T = 12;
+static int const V13_THINKER_T_FUNC_OFFSET = 8;
 
 using namespace de;
 

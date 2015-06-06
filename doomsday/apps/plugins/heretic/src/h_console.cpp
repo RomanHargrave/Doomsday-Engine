@@ -18,10 +18,7 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
 #include "hu_menu.h"
-#include "hu_stuff.h"
-#include "p_inventory.h"
 
 using namespace common;
 

@@ -21,19 +21,13 @@
 
 #include <string.h>
 
-#include "jheretic.h"
-
 #include "d_net.h"
 #include "d_netsv.h"
-#include "dmu_lib.h"
-#include "player.h"
 #include "p_inventory.h"
-#include "hu_inventory.h"
 #include "p_tick.h"
 #include "p_user.h"
-#include "p_mapsetup.h"
 
-#define BONUSADD            (6)
+static int const BONUSADD = 6;
 
 // Maximum number of rounds for each ammo type.
 int maxAmmo[NUM_AMMO_TYPES]      = { 100, 50, 200, 200, 20, 150 };

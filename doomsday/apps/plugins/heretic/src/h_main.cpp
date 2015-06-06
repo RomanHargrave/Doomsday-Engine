@@ -20,20 +20,13 @@
  * 02110-1301 USA</small>
  */
 
-#include "jheretic.h"
-
 #include <cstring>
 #include <de/App>
 #include "d_netsv.h"
-#include "g_defs.h"
 #include "gamesession.h"
-#include "hereticv13mapstatereader.h"
-#include "hu_menu.h"
 #include "hud/widgets/automapwidget.h"
-#include "m_argv.h"
 #include "p_inventory.h"
 #include "p_map.h"
-#include "p_saveg.h"
 #include "saveslots.h"
 
 using namespace de;
