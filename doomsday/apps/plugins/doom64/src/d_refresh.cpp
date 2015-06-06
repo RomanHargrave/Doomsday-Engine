@@ -19,22 +19,9 @@
  * 02110-1301 USA</small>
  */
 
-#include <string.h>
-#include <assert.h>
-
-#include "jdoom64.h"
-
 #include "hu_stuff.h"
 #include "hu_menu.h"
 #include "hu_pspr.h"
-#include "hu_msg.h"
-#include "g_common.h"
-#include "r_common.h"
-#include "d_net.h"
-#include "x_hair.h"
-#include "g_controls.h"
-#include "p_mapsetup.h"
-#include "p_tick.h"
 #include "p_actor.h"
 #include "dmu_lib.h"
 

@@ -24,20 +24,13 @@
  * Boston, MA  02110-1301  USA
  */
 
-#include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-#include "jdoom64.h"
 
 #include "dmu_lib.h"
 #include "d_net.h"
 #include "p_mapsetup.h"
 #include "p_tick.h" // for Pause_IsPaused
 #include "p_inventory.h"
-#include "player.h"
-#include "r_common.h"
 
 using namespace de;
 

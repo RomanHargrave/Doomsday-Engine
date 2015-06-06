@@ -34,8 +34,6 @@
 #  pragma optimize("g", off)
 #endif
 
-#include "jdoom64.h"
-
 #include "dmu_lib.h"
 #include "p_map.h"
 #include "p_mapspec.h"
@@ -44,18 +42,15 @@
 #include "p_actor.h"
 #include "p_tick.h"
 
-#define FATSPREAD               (ANG90/8)
-#define FAT_DELTAANGLE          (85*ANGLE_1) // jd64
-#define FAT_ARM_EXTENSION_SHORT (32) // jd64
-#define FAT_ARM_EXTENSION_LONG  (16) // jd64
-#define FAT_ARM_HEIGHT          (64) // jd64
-#define SKULLSPEED              (20)
+static float const FATSPREAD = ANG90 / 8.0F;
+static float const FAT_DELTAANGLE = 85 * ANGLE_1;
+static int const FAT_ARM_EXTENSION_SHORT = 32;
+static int const FAT_ARM_EXTENSION_LONG = 16;
+static int const FAT_ARM_HEIGHT;
+static int const SKULLSPEED = 20;
 
-#define TRACEANGLE              (0xc000000)
-
-
-// Eight directional movement speeds.
-#define MOVESPEED_DIAGONAL      (0.71716309f)
+static int const TRACEANGLE = 0xc000000;
+static float const MOVESPEED_DIAGONAL = 0.71716309F;
 
 static coord_t const dirSpeed[8][2] =
 {
@@ -68,7 +63,6 @@ static coord_t const dirSpeed[8][2] =
     {0, -1},
     {MOVESPEED_DIAGONAL, -MOVESPEED_DIAGONAL}
 };
-#undef MOVESPEED_DIAGONAL
 
 /**
  * If a monster yells at a player, it will alert other monsters to the

@@ -24,20 +24,15 @@
 #  pragma optimize("g", off)
 #endif
 
-#include "jdoom64.h"
-
 #include "d_net.h"
 #include "d_netsv.h"
-#include "dmu_lib.h"
-#include "player.h"
-#include "p_map.h"
 #include "p_user.h"
 #include "p_tick.h"
 #include "p_actor.h"
 #include "p_inventory.h"
 #include "p_start.h"
 
-#define BONUSADD            (6)
+static int const BONUSADD = 6;
 
 // A weapon is found with two clip loads, a big item has five clip loads.
 int maxAmmo[NUM_AMMO_TYPES] = { 200, 50, 300, 50 };

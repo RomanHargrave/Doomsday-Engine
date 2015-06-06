@@ -35,8 +35,6 @@
 #  error "Using jDoom64 headers without __JDOOM64__"
 #endif
 
-#include "jdoom64.h"
-
 DENG_EXTERN_C int maxAmmo[];
 DENG_EXTERN_C int clipAmmo[];
 

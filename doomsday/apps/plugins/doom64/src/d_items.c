@@ -32,8 +32,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "jdoom64.h"
-
 #include "g_defs.h"
 #include "player.h"
 

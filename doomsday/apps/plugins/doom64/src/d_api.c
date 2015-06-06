@@ -31,15 +31,8 @@
 
 #include "doomsday.h"
 
-#include "jdoom64.h"
-
 #include "d_netsv.h"
-#include "d_net.h"
-#include "fi_lib.h"
-#include "g_common.h"
 #include "g_update.h"
-#include "hu_menu.h"
-#include "p_mapsetup.h"
 #include "r_common.h"
 #include "p_map.h"
 #include "polyobjs.h"
@@ -63,11 +56,10 @@ static __inline gameid_t toGameId(int gamemode)
  */
 int G_RegisterGames(int hookType, int param, void* data)
 {
-#define CONFIGDIR       "doom64"
-#define STARTUPPK3      PLUGIN_NAMETEXT2 ".pk3"
+    static char* const STARTUPPK3 = PLUGIN_NAMETEXT2 ".pk3";
 
     GameDef const doom64Def = {
-        "doom64", CONFIGDIR,
+        "doom64", "doom64",
         "Doom 64: Absolution", "Kaiser et al.",
         "", "",
         "$(App.DataPath)/$(GamePlugin.Name)/doom64.mapinfo"
@@ -80,9 +72,6 @@ int G_RegisterGames(int hookType, int param, void* data)
     DD_AddGameResource(GID(doom64), RC_PACKAGE, FF_STARTUP, "doom64.wad", "MAP01;MAP20;MAP33;F_SUCK");
     DD_AddGameResource(GID(doom64), RC_DEFINITION, 0, PLUGIN_NAMETEXT ".ded", 0);
     return true;
-
-#undef STARTUPPK3
-#undef CONFIGDIR
 }
 
 /**

@@ -22,8 +22,11 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <include/p_mobj.h>
+#include <include/d_api.h>
+#include <include/doomdef.h>
+#include <include/d_config.h>
 
-#include "jdoom64.h"
 #include "dmu_lib.h"
 
 /**
@@ -122,7 +125,7 @@ void P_ApplyTorque(mobj_t *mo)
     if(!cfg.slidingCorpses)
         return;
 
-    VALIDCOUNT++;
+    ++VALIDCOUNT;
     Mobj_TouchedLinesIterator(mo, PIT_ApplyTorque, mo);
 
     // If any momentum, mark object as 'falling' using engine-internal

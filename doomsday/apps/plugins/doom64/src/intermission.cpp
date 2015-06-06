@@ -19,23 +19,14 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom64.h"
 #include "intermission.h"
-
-#include <cstdio>
-#include <cctype>
-#include <cstring>
 
 #include "d_net.h"
 #include "d_netcl.h"
 #include "d_netsv.h"
 #include "hu_stuff.h"
-#include "p_mapsetup.h"
-#include "p_start.h"
 
 using namespace de;
-
-#define NUMMAPS                 (9)
 
 // Internal utility functions
 namespace internal 

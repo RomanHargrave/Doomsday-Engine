@@ -19,10 +19,7 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom64.h"
-
 #include "hu_menu.h"
-#include "hu_stuff.h"
 
 D_CMD(CheatGive);
 D_CMD(CheatGod);

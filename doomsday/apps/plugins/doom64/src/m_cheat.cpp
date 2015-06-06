@@ -20,34 +20,16 @@
  * 02110-1301 USA</small>
  */
 
-// TODO : Header cleanup. After the makeover, a lot of these are probably unused
-
-#include "jdoom64.h"
-#include "m_cheat.h"
-
 #include <de/Log>
-#include <de/Range>
-#include <de/String>
 #include <de/Vector>
 
-#include <cstdlib>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#ifdef UNIX
-# include <cerrno>
-#endif
 #include "d_net.h"
 #include "d_netcl.h"
 #include "d_netsv.h"
 #include "dmu_lib.h"
-#include "g_common.h"
 #include "gamesession.h"
-#include "hu_menu.h"
 #include "hu_msg.h"
-#include "player.h"
 #include "p_inventory.h"
-#include "p_start.h"
 #include "p_user.h"
 
 /*
@@ -487,7 +469,7 @@ static void printDebugInfo(player_t *plr)
     // Output debug info to HUD and console
     {
         char textBuffer[256];
-        sprintf(textBuffer, "MAP [%s]  X:%g  Y:%g  Z:%g",
+        sprintf(textBuffer, "MAP [%s]  X:%f  Y:%f  Z:%f",
                             COMMON_GAMESESSION->mapUri().path().toUtf8().constData(),
                             plrMo->origin[VX], plrMo->origin[VY], plrMo->origin[VZ]);
 
@@ -500,18 +482,18 @@ static void printDebugInfo(player_t *plr)
     Sector *sector = Mobj_Sector(plrMo);
 
     ::Uri *matUri = Materials_ComposeUri(P_GetIntp(sector, DMU_FLOOR_MATERIAL));
-    LOG_SCR_MSG("FloorZ:%g Material:%s")
+    LOG_SCR_MSG("FloorZ:%f Material:%s")
             << P_GetDoublep(sector, DMU_FLOOR_HEIGHT)
             << Str_Text(Uri_ToString(matUri));
 
     Uri_Delete(matUri);
 
     matUri = Materials_ComposeUri(P_GetIntp(sector, DMU_CEILING_MATERIAL));
-    App_Log(DE2_MAP_MSG, "CeilingZ:%g Material:%s",
+    App_Log(DE2_MAP_MSG, "CeilingZ:%f Material:%s",
                           P_GetDoublep(sector, DMU_CEILING_HEIGHT), Str_Text(Uri_ToString(matUri)));
     Uri_Delete(matUri);
 
-    App_Log(DE2_MAP_MSG, "Player height:%g Player radius:%g",
+    App_Log(DE2_MAP_MSG, "Player height:%f Player radius:%f",
                           plrMo->height, plrMo->radius);
 }
 

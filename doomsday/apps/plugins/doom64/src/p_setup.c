@@ -18,7 +18,11 @@
  * 02110-1301 USA</small>
  */
 
-#include "jdoom64.h"
+
+#include <api_mapedit.h>
+#include <p_mapsetup.h>
+#include <include/d_api.h>
+#include <include/p_setup.h>
 
 /**
  * Called during pre-init.

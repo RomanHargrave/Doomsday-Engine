@@ -23,15 +23,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "jdoom64.h"
-
 #include "dmu_lib.h"
 #include "p_mapsetup.h"
 #include "p_map.h"
-#include "mobj.h"
 #include "p_actor.h"
-#include "p_mapspec.h"
-#include "p_terraintype.h"
 #include "p_start.h"
 
 mobj_t *P_SpawnTeleFog(coord_t x, coord_t y, angle_t angle)
