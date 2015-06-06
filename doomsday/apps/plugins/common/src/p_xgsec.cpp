@@ -34,19 +34,10 @@
 #endif
 
 #include "dmu_lib.h"
-#include "p_mapsetup.h"
-#include "p_xgline.h"
-#include "p_xgsec.h"
-#include "g_common.h"
 #include "p_map.h"
-#include "mobj.h"
 #include "p_actor.h"
-#include "p_mapspec.h"
 #include "p_sound.h"
-#include "p_terraintype.h"
 #include "p_tick.h"
-
-#define MAX_VALS        128
 
 #define SIGN(x)         ((x)>0? 1 : (x)<0? -1 : 0)
 

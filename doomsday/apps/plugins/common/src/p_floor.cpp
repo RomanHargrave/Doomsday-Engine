@@ -30,22 +30,27 @@
 #include "p_map.h"
 #include "p_mapspec.h"
 #include "p_tick.h"
+
 #if __JHEXEN__ || __JDOOM64__
-#include "p_ceiling.h"
+#   include "p_ceiling.h"
+#   include "info.h"
 #endif
+
 #include "p_sound.h"
 #include "p_saveg.h"
 
 #if __JHERETIC__
-# define SFX_FLOORMOVE          (SFX_DORMOV)
-#else
-# define SFX_FLOORMOVE          (SFX_STNMOV)
+static sfxenum_t const SFX_FLOORMOVE = SFX_DORMOV;
+#elif !defined(__JHEXEN__)
+static sfxenum_t const SFX_FLOORMOVE = SFX_STNMOV;
 #endif
 
 #if __JHEXEN__
-#define STAIR_SECTOR_TYPE       26
-#define STAIR_QUEUE_SIZE        32
+static int const STAIR_SECTOR_TYPE = 26;
+static int const STAIR_QUEUE_SIZE = 32;
 #endif
+
+using namespace common;
 
 #if __JHEXEN__
 typedef struct stairqueue_s {

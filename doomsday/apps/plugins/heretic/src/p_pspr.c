@@ -38,10 +38,10 @@
 #include "p_tick.h"
 #include "player.h"
 
-#define LOWERSPEED          (6)
-#define RAISESPEED          (6)
-#define WEAPONBOTTOM        (128)
-#define WEAPONTOP           (32)
+static int const WEAPONTOP    = 32;
+static int const WEAPONBOTTOM = 128;
+static int const RAISESPEED   = 6;
+static int const LOWERSPEED   = 6;
 
 static AmmoDef ammoDefs[NUM_AMMO_TYPES] = {
     /*AT_CRYSTAL*/  { GM_ANY,           "INAMGLD" },

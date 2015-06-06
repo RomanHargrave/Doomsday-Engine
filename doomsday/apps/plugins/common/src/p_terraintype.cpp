@@ -39,8 +39,6 @@
 #  include "jhexen.h"
 #endif
 
-#include "dmu_lib.h"
-#include "p_terraintype.h"
 
 // MACROS ------------------------------------------------------------------
 

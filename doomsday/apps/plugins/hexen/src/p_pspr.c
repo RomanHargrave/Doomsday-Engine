@@ -31,22 +31,25 @@
 #include "player.h"
 #include "r_common.h"
 
-#define LOWERSPEED          (6)
-#define RAISESPEED          (6)
-#define WEAPONBOTTOM        (128)
-#define WEAPONTOP           (32)
+static int const WEAPONTOP          = 6;
+static int const WEAPONBOTTOM       = 128;
+static int const RAISESPEED         = 6;
+static int const LOWERSPEED         = 6;
 
-#define ZAGSPEED            (1)
-#define MAX_ANGLE_ADJUST    (5*ANGLE_1)
-#define HAMMER_RANGE        (MELEERANGE+MELEERANGE/2)
-#define AXERANGE            (2.25*MELEERANGE)
-#define FLAMESPEED          (0.45)
-#define FLAMEROTSPEED       (2)
+static int const ZAGSPEED           = 1;
+static float const MAX_ANGLE_ADJUST = 5 * ANGLE_1;
 
-#define SHARDSPAWN_LEFT     (1)
-#define SHARDSPAWN_RIGHT    (2)
-#define SHARDSPAWN_UP       (4)
-#define SHARDSPAWN_DOWN     (8)
+static float const HAMMER_RANGE     = MELEERANGE + MELEERANGE / 2;
+static float const AXERANGE         = 2.25F * MELEERANGE;
+static float const FLAMESPEED       = 0.45F;
+static float const FLAMEROTSPEED    = 2;
+
+typedef enum shardspawndir_s {
+    SHARDSPAWN_LEFT  = 1,
+    SHARDSPAWN_RIGHT = 2,
+    SHARDSPAWN_UP    = 4,
+    SHARDSPAWN_DOWN  = 8
+} shardspawndir_t;
 
 float bulletSlope;
 

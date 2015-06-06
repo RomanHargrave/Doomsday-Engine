@@ -26,10 +26,12 @@
  * Common routines for refresh.
  */
 
-#include <assert.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "g_common.h"
+#include "p_actor.h"
 
 #if __JDOOM__
 #  include "jdoom.h"
@@ -41,11 +43,7 @@
 #  include "jhexen.h"
 #endif
 
-#include "g_common.h"
-#include "g_controls.h"
 #include "hu_stuff.h"
-#include "p_actor.h"
-#include "player.h"
 #include "r_common.h"
 #include "x_hair.h"
 

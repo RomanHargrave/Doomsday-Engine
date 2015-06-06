@@ -596,6 +596,8 @@ static void spawnPlayer(int plrNum, playerclass_t pClass, coord_t x, coord_t y,
  */
 void P_SpawnClient(int plrNum)
 {
+    static int const WEAPONBOTTOM = 128; // TODO Namespace all of these
+
     App_Log(DE2_MAP_VERBOSE,
             "Spawning client player mobj (for player %i; console player is %i)",
             plrNum, CONSOLEPLAYER);

@@ -30,6 +30,7 @@
 #endif
 
 using namespace de;
+using namespace common;
 
 // XXX This preprocessor specialization (appears as if it) can be harmlessly removed
 #if !__JHEXEN__

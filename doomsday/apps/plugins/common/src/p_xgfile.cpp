@@ -30,6 +30,7 @@
 #include <cstring>
 
 using namespace de;
+using namespace common;
 
 enum xgsegenum_t
 {

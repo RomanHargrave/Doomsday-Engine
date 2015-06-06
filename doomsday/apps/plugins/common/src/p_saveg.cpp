@@ -33,6 +33,8 @@
 #include <cstdio>
 #include <cstring>
 
+using namespace common;
+
 int saveToRealPlayerNum[MAXPLAYERS];
 #if __JHEXEN__
 targetplraddress_t *targetPlayerAddrs;

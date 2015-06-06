@@ -32,6 +32,8 @@
 #include "p_saveg.h"
 #include <de/memory.h>
 
+using namespace common;
+
 /**
  * This struct is used to provide byte offsets when reading a custom
  * SWITCHES lump thus it must be packed and cannot be altered.

@@ -39,8 +39,6 @@
 #  include "jhexen.h"
 #endif
 
-#include "g_controls.h"
-#include "r_common.h"
 
 // MACROS ------------------------------------------------------------------
 

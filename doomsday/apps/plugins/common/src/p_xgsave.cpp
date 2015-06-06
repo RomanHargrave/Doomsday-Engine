@@ -28,6 +28,8 @@
 #include "p_saveg.h"
 #include "p_xg.h"
 
+using namespace common;
+
 void SV_WriteXGLine(Line *li, MapStateWriter *msw)
 {
     Writer *writer = msw->writer();

@@ -30,23 +30,23 @@
 #include "hu_menu.h"
 #include "g_common.h"
 
-#define TEXTSPEED               (3)
-#define TEXTWAIT                (140)
+static int const TEXTSPEED                = 3;
+static int const TEXTWAIT                 = 140;
 
-#define TALLY_EFFECT_TICKS      (20)
-#define TALLY_FINAL_X_DELTA     (23 * FRACUNIT)
-#define TALLY_FINAL_Y_DELTA     (13 * FRACUNIT)
-#define TALLY_START_XPOS        (178 * FRACUNIT)
-#define TALLY_STOP_XPOS         (90 * FRACUNIT)
-#define TALLY_START_YPOS        (132 * FRACUNIT)
-#define TALLY_STOP_YPOS         (83 * FRACUNIT)
-#define TALLY_TOP_X             (85)
-#define TALLY_TOP_Y             (9)
-#define TALLY_LEFT_X            (7)
-#define TALLY_LEFT_Y            (71)
-#define TALLY_TOTALS_X          (291)
+static int const TALLY_EFFECT_TICKS       = 20;
+static float const TALLY_FINAL_X_DELTA    = 23 * FRACUNIT;
+static float const TALLY_FINAL_Y_DELTA    = 13 * FRACUNIT;
+static float const TALLY_START_XPOS       = 178 * FRACUNIT;
+static float const TALLY_STOP_XPOS        = 90 * FRACUNIT;
+static float const TALLY_START_YPOS       = 132 * FRACUNIT;
+static float const TALLY_STOP_YPOS        = 83 * FRACUNIT;
+static int const TALLY_TOP_X              = 85;
+static int const TALLY_TOP_Y              = 9;
+static int const TALLY_LEFT_X             = 7;
+static int const TALLY_LEFT_Y             = 71;
+static int const TALLY_TOTALS_X           = 291;
 
-#define MAX_INTRMSN_MESSAGE_SIZE (1024)
+static int const MAX_INTRMSN_MESSAGE_SIZE = 1024;
 
 using namespace de;
 
@@ -325,7 +325,7 @@ void IN_Drawer()
                                    Get(DD_WINDOW_WIDTH), Get(DD_WINDOW_HEIGHT), scalemode_t(cfg.common.inludeScaleMode));
     GL_BeginBorderedProjection(&bp);
 
-    lumpnum_t lumpNum = CentralLumpIndex().findLast("INTERPIC.lmp");
+    lumpnum_t lumpNum = common::CentralLumpIndex().findLast("INTERPIC.lmp");
     if(lumpNum >= 0)
     {
         DGL_Color4f(1, 1, 1, 1);

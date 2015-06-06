@@ -52,9 +52,10 @@
 
 // MACROS ------------------------------------------------------------------
 
-#define LOWERSPEED      6
-#define RAISESPEED      6
-#define WEAPONTOP       32
+static int const WEAPONTOP    = 32;
+static int const WEAPONBOTTOM = 128;
+static int const RAISESPEED   = 6;
+static int const LOWERSPEED   = 6;
 
 // TYPES -------------------------------------------------------------------
 

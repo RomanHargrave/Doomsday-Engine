@@ -41,6 +41,7 @@
 #define UIAUTOMAP_BORDER        4  ///< In fixed 320x200 pixels.
 
 using namespace de;
+using namespace common;
 
 static void AutomapWidget_UpdateGeometry(AutomapWidget *amap)
 {

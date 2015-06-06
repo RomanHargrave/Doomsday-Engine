@@ -29,6 +29,7 @@
 #include "gamesession.h"
 
 using namespace de;
+using namespace common;
 
 namespace acs {
 
