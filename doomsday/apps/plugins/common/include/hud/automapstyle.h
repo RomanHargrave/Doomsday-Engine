@@ -182,6 +182,9 @@ public:
 
     void applyDefaults();
 
+    void newLineInfo(int, int, int, int, float, float, float, float, blendmode_t, glowtype_t,
+                     float, float, dd_bool);
+
     automapcfg_lineinfo_t const &lineInfo(int lineType);
 
     automapcfg_lineinfo_t const *tryFindLineInfo(automapcfg_objectname_t name) const;

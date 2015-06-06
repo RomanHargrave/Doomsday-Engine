@@ -351,11 +351,40 @@ static void initAutomapForCurrentMap(AutomapWidget& map)
         map.setFlags(map.flags() | AWF_SHOW_KEYS);
     }
 
-    // Show player arrow in cheat/dev mode
-    if (hud->automapCheatLevel > 0)
     {
-        AutomapStyle* mapStyle = map.style();
-        mapStyle->setObjectSvg(AMO_THINGPLAYER, VG_CHEATARROW);
+        AutomapStyle* style = map.style();
+        // Show player arrow in cheat/dev mode
+        if (hud->automapCheatLevel > 0)
+        {
+            style->setObjectSvg(AMO_THINGPLAYER, VG_CHEATARROW);
+        }
+
+        // Blue locked door, open.
+        style->newLineInfo(0,  32, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Blue lockestyle styleoor, lockestyle.
+        style->newLineInfo(0,  26, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0,  99, 0, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 133, 0, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Restyle lockestyle styleoor, open.
+        style->newLineInfo(0,  33, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Restyle lockestyle styleoor, lockestyle.
+        style->newLineInfo(0,  28, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 134, 0, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 135, 0, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Yellow lockestyle styleoor, open.
+        style->newLineInfo(0,  34, 2, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Yellow lockestyle styleoor, lockestyle.
+        style->newLineInfo(0,  27, 2, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 136, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 137, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Exit switch.
+        style->newLineInfo(AWF_SHOW_SPECIALLINES,  11, 0, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Exit cross line.
+        style->newLineInfo(AWF_SHOW_SPECIALLINES,  52, 2, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Secret Exit switch.
+        style->newLineInfo(AWF_SHOW_SPECIALLINES,  51, 0, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Secret Exit cross line.
+        style->newLineInfo(AWF_SHOW_SPECIALLINES, 124, 2, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
     }
 
     // Focus camera on currently followed map object, if applicable

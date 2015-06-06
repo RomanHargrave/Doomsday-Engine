@@ -780,11 +780,31 @@ void ST_Start(int localPlayer)
         flags |= ALIGN_RIGHT;
     tcGroup.setAlignment(flags);
 
-    auto &automap = GUI_FindWidgetById(hud->automapId).as<AutomapWidget>();
-    // If the automap was left open; close it.
-    automap.open(false, true /*instantly*/);
-    initAutomapForCurrentMap(automap);
-    automap.setCameraRotationMode(CPP_BOOL(cfg.common.automapRotate));
+    {
+        AutomapWidget& automap = GUI_FindWidgetById(hud->automapId).as<AutomapWidget>();
+        // If the automap was left open; close it.
+        automap.open(false, true /*instantly*/);
+        initAutomapForCurrentMap(automap);
+        automap.setCameraRotationMode(CPP_BOOL(cfg.common.automapRotate));
+
+        // Configure heretic line types for the map widget
+        {
+            AutomapStyle* style = automap.style();
+
+            // Blue locked door.
+            style->newLineInfo(0, 26, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+            // Blue switch?
+            style->newLineInfo(0, 32, 0, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+            // Yellow lockestyle styleoor.
+            style->newLineInfo(0, 27, 2, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+            // Yellow switch?
+            style->newLineInfo(0, 34, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+            // Green lockestyle styleoor.
+            style->newLineInfo(0, 28, 2, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+            // Green switch?
+            style->newLineInfo(0, 33, 0, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        }
+    }
 
     hud->stopped = false;
 }

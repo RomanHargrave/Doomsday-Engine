@@ -580,10 +580,6 @@ static void setAutomapCheatLevel(AutomapWidget &automap, int level)
 
 static void initAutomapForCurrentMap(AutomapWidget &automap)
 {
-#ifdef __JDOOM__
-    hudstate_t *hud = &hudStates[automap.player()];
-#endif
-
     automap.reset();
 
     automap.setMapBounds(*((coord_t *) DD_GetVariable(DD_MAP_MIN_X)),
@@ -591,27 +587,29 @@ static void initAutomapForCurrentMap(AutomapWidget &automap)
                          *((coord_t *) DD_GetVariable(DD_MAP_MIN_Y)),
                          *((coord_t *) DD_GetVariable(DD_MAP_MAX_Y)));
 
-#if __JDOOM__
-    automapcfg_t *style = automap.style();
-#endif
+    // Add Hexen line info
+    {
+        AutomapStyle* style = automap.style();
+
+        // A locked door (all are green).
+        style->newLineInfo(0, 13, 0, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 83, 0, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Intra-map teleporters (all are blue).
+        style->newLineInfo(0, 70, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        style->newLineInfo(0, 71, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Inter-map teleport.
+        style->newLineInfo(0, 74, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+        // Game-winning exit.
+        style->newLineInfo(0, 75, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
+    }
 
     // Determine the wi view scale factors.
     if(automap.cameraZoomMode())
+    {
         automap.setScale(0);
+    }
 
     automap.clearAllPoints(true/*silent*/);
-
-#if !__JHEXEN__
-    if(gameRules.skill == SM_BABY && cfg.common.automapBabyKeys)
-    {
-        automap.setFlags(automap.flags() | AWF_SHOW_KEYS);
-    }
-#endif
-
-#if __JDOOM__
-    if(!IS_NETGAME && hud->automapCheatLevel)
-        AM_SetVectorGraphic(style, AMO_THINGPLAYER, VG_CHEATARROW);
-#endif
 
     // Are we re-centering on a followed mobj?
     if(mobj_t *mob = automap.followMobj())
@@ -634,6 +632,7 @@ static void initAutomapForCurrentMap(AutomapWidget &automap)
 
         P_SetLineAutomapVisibility(automap.player(), i, true);
     }
+
 }
 
 void ST_Start(int localPlayer)

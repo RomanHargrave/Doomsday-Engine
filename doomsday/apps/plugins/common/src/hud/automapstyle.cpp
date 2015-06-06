@@ -21,14 +21,7 @@
 #include "common.h"
 #include "hud/automapstyle.h"
 
-#include <cstdio>
-#include <cmath>
-#include <cctype>
-#include <cstring>
-#include <de/Log>
-#include "p_mapsetup.h"
 #include "hu_stuff.h"
-#include "player.h"
 #include "hud/widgets/automapwidget.h"  /// @ref automapWidgetFlags
 
 using namespace de;
@@ -73,39 +66,6 @@ DENG2_PIMPL_NOREF(AutomapStyle)
         return nullptr;  // Not found.
     }
 
-    void newLineInfo(int reqAutomapFlags, int reqSpecial, int reqSided, int reqNotFlagged,
-        float r, float g, float b, float a, blendmode_t blendmode, glowtype_t glowType,
-        float glowStrength, float glowSize, dd_bool scaleGlowWithView)
-    {
-        DENG2_ASSERT(reqSpecial >= 0)
-        DENG2_ASSERT(reqSided >= 0 && reqSided <= 2);
-
-        // Later re-registrations override earlier ones.
-        automapcfg_lineinfo_t *info = findLineInfo(reqAutomapFlags, reqSpecial, reqSided, reqNotFlagged);
-        if(!info)
-        {
-            // Any room for a new special line?
-            if(lineInfoCount >= AUTOMAPCFG_MAX_LINEINFO)
-                throw Error("AutomapStyle::d->newLineInfo", "No available slot.");
-
-            info = &lineInfo[lineInfoCount++];
-        }
-
-        info->reqAutomapFlags   = reqAutomapFlags;
-        info->reqSpecial        = reqSpecial;
-        info->reqSided          = reqSided;
-        info->reqNotFlagged     = reqNotFlagged;
-
-        info->rgba[0]       = de::clamp(0.f, r, 1.f);
-        info->rgba[1]       = de::clamp(0.f, g, 1.f);
-        info->rgba[2]       = de::clamp(0.f, b, 1.f);
-        info->rgba[3]       = de::clamp(0.f, a, 1.f);
-        info->glow          = glowType;
-        info->glowStrength  = de::clamp(0.f, glowStrength, 1.f);
-        info->glowSize      = glowSize;
-        info->scaleWithView = scaleGlowWithView;
-        info->blendMode     = blendmode;
-    }
 };
 
 AutomapStyle::AutomapStyle() : d(new Instance)
@@ -113,6 +73,40 @@ AutomapStyle::AutomapStyle() : d(new Instance)
 
 AutomapStyle::~AutomapStyle()
 {}
+
+void AutomapStyle::newLineInfo(int reqAutomapFlags, int reqSpecial, int reqSided, int reqNotFlagged,
+                 float r, float g, float b, float a, blendmode_t blendmode, glowtype_t glowType,
+                 float glowStrength, float glowSize, dd_bool scaleGlowWithView)
+{
+    DENG2_ASSERT(reqSpecial >= 0)
+    DENG2_ASSERT(reqSided >= 0 && reqSided <= 2);
+
+    // Later re-registrations override earlier ones.
+    automapcfg_lineinfo_t *info = d->findLineInfo(reqAutomapFlags, reqSpecial, reqSided, reqNotFlagged);
+    if(!info)
+    {
+        // Any room for a new special line?
+        if(d->lineInfoCount >= AUTOMAPCFG_MAX_LINEINFO)
+            throw Error("AutomapStyle::d->newLineInfo", "No available slot.");
+
+        info = &d->lineInfo[d->lineInfoCount++];
+    }
+
+    info->reqAutomapFlags   = reqAutomapFlags;
+    info->reqSpecial        = reqSpecial;
+    info->reqSided          = reqSided;
+    info->reqNotFlagged     = reqNotFlagged;
+
+    info->rgba[0]       = de::clamp(0.f, r, 1.f);
+    info->rgba[1]       = de::clamp(0.f, g, 1.f);
+    info->rgba[2]       = de::clamp(0.f, b, 1.f);
+    info->rgba[3]       = de::clamp(0.f, a, 1.f);
+    info->glow          = glowType;
+    info->glowStrength  = de::clamp(0.f, glowStrength, 1.f);
+    info->glowSize      = glowSize;
+    info->scaleWithView = scaleGlowWithView;
+    info->blendMode     = blendmode;
+}
 
 automapcfg_lineinfo_t const &AutomapStyle::lineInfo(int lineType)
 {
@@ -220,60 +214,6 @@ void AutomapStyle::applyDefaults()
     d->mapObjectInfo[MOL_LINEDEF_CEILING].rgba[1] = 1;
     d->mapObjectInfo[MOL_LINEDEF_CEILING].rgba[2] = 1;
     d->mapObjectInfo[MOL_LINEDEF_CEILING].rgba[3] = 1;
-
-    // Register lines we want to display in a special way.
-#if __JDOOM__ || __JDOOM64__
-    // Blue locked door, open.
-    d->newLineInfo(0,  32, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Blue locked door, locked.
-    d->newLineInfo(0,  26, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0,  99, 0, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 133, 0, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Red locked door, open.
-    d->newLineInfo(0,  33, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Red locked door, locked.
-    d->newLineInfo(0,  28, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 134, 0, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 135, 0, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Yellow locked door, open.
-    d->newLineInfo(0,  34, 2, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Yellow locked door, locked.
-    d->newLineInfo(0,  27, 2, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 136, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 137, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Exit switch.
-    d->newLineInfo(AWF_SHOW_SPECIALLINES,  11, 0, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Exit cross line.
-    d->newLineInfo(AWF_SHOW_SPECIALLINES,  52, 2, ML_SECRET, 0, 1, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Secret Exit switch.
-    d->newLineInfo(AWF_SHOW_SPECIALLINES,  51, 0, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Secret Exit cross line.
-    d->newLineInfo(AWF_SHOW_SPECIALLINES, 124, 2, ML_SECRET, 0, 1, 1, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-#elif __JHERETIC__
-    // Blue locked door.
-    d->newLineInfo(0, 26, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Blue switch?
-    d->newLineInfo(0, 32, 0, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Yellow locked door.
-    d->newLineInfo(0, 27, 2, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Yellow switch?
-    d->newLineInfo(0, 34, 0, ML_SECRET, .905f, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Green locked door.
-    d->newLineInfo(0, 28, 2, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Green switch?
-    d->newLineInfo(0, 33, 0, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-#elif __JHEXEN__
-    // A locked door (all are green).
-    d->newLineInfo(0, 13, 0, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 83, 0, ML_SECRET, 0, .9f, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Intra-map teleporters (all are blue).
-    d->newLineInfo(0, 70, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    d->newLineInfo(0, 71, 2, ML_SECRET, 0, 0, .776f, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Inter-map teleport.
-    d->newLineInfo(0, 74, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-    // Game-winning exit.
-    d->newLineInfo(0, 75, 2, ML_SECRET, .682f, 0, 0, 1, BM_NORMAL, GLOW_BOTH, .75f, 5, true);
-#endif
 
     setObjectSvg(AMO_THING, VG_TRIANGLE);
     setObjectSvg(AMO_THINGPLAYER, VG_ARROW);
